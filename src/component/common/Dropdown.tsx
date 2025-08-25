@@ -33,7 +33,7 @@ const Dropdown: React.FC<Props> = ({options, value, onChange, isDropdownActive, 
             {isDropdownActive && (
                 <Menu role="listbox">
                      <SearchWrapper>
-                        <SearchInput type="text" placeholder="Search" />
+                        <SearchInput type="text" placeholder="검색" />
                         <SearchIcon />
                     </SearchWrapper>
                 {options.map((opt) => (

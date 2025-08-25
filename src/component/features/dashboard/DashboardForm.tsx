@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import Dropdown from '../../common/Dropdown'
 import { color } from '../../../style/color'
+import LabelWithHelp from '../../common/LabelWithHelp'
 
 interface Props{
     dropdownList: string[]
@@ -32,6 +33,8 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                     isDropdownActive={isDropdownActive}
                     setIsDropdownActive={setIsDropdownActive}
                 />
+
+                <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
             </Body>
         </Container>
     )
