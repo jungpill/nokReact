@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import React from "react";
 import {color} from "../../style/color";``
+import { AiOutlineCaretUp} from "react-icons/ai";
+import { CiSearch } from "react-icons/ci";
 
 interface Props{
     options: string[];
@@ -23,18 +25,17 @@ const Dropdown: React.FC<Props> = ({options, value, onChange, isDropdownActive, 
         setIsDropdownActive(false);
       };
     
-      React.useEffect(() => {
-        const close = () => setIsDropdownActive(false);
-        document.addEventListener("click", close);
-        return () => document.removeEventListener("click", close);
-      }, [setIsDropdownActive]);
+     
 
     return(
         <Wrapper>
-            <Trigger onClick={toggle}>{value}</Trigger>
-
+            <Trigger onClick={toggle}>{value} <Icon isDropdownActive={isDropdownActive} /></Trigger>
             {isDropdownActive && (
                 <Menu role="listbox">
+                     <SearchWrapper>
+                        <SearchInput type="text" placeholder="Search" />
+                        <SearchIcon />
+                    </SearchWrapper>
                 {options.map((opt) => (
                     <Item key={opt} onClick={select(opt)} role="option">
                     {opt}
@@ -62,8 +63,9 @@ const Trigger = styled.button`
   border: none;
   color: ${color.black};
   background: ${color.gray};
-  text-align: left;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 `;
 
 const Menu = styled.div`
@@ -81,9 +83,38 @@ const Menu = styled.div`
   z-index: 100;           
 `;
 
+const SearchWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+`
+
+const SearchInput = styled.input`
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    padding: 6px 8px;
+    background-color: ${color.gray};
+`
+
 const Item = styled.div`
   padding: 8px 10px;
   cursor: pointer;
-  
+
   &:hover { background: ${color.gray}; }
+`;
+
+const SearchIcon = styled(CiSearch)`
+    position: absolute;
+    right: 20px;
+    color: black;
+    width: 20px;
+    height: 20px;
+`
+
+const Icon = styled(AiOutlineCaretUp)<{isDropdownActive: boolean}>`
+  transform: ${({isDropdownActive}) => isDropdownActive ? 'rotate(180deg)' : 'rotate(0deg)'};
+  margin-left: auto;
 `;
