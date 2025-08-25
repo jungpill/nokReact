@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Dropdown from '../../common/Dropdown'
 import { color } from '../../../style/color'
 import LabelWithHelp from '../../common/LabelWithHelp'
+import SolutionChart from '../../solution/SolutionChart'
 
 interface Props{
     dropdownList: string[]
@@ -35,6 +36,15 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                 />
 
                 <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
+
+                <Row>
+                    <LeftWrapper>
+                        <SolutionChart />
+                    </LeftWrapper>
+                    <RightWrapper>
+                        
+                    </RightWrapper>
+                </Row>
             </Body>
         </Container>
     )
@@ -72,4 +82,20 @@ const Body = styled.div`
     background-color: ${color.white};
     height: 100%;
     width: 100%;
+`
+
+const Row = styled.div`
+    display: flex;
+`
+
+const LeftWrapper = styled.div`
+    display: flex;
+    width: 65%;
+    max-height: 700px;
+    border: 1px solid ${color.gray};
+`
+
+const RightWrapper = styled.div`
+    display: flex;
+    width: 30%;
 `
