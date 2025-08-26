@@ -64,7 +64,7 @@ const SolutionChart = () => {
             },
           },
         },
-        layout: { padding: { top: 30, right: 30, bottom: 30, left: 30 } },
+        layout: { padding: { top: 30, right: 30, bottom: 30, left: 30 }, },
       }
 
     return (

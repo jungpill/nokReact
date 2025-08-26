@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import Dropdown from '../../common/Dropdown'
 import { color } from '../../../style/color'
 import LabelWithHelp from '../../common/LabelWithHelp'
-import SolutionChart from '../../solution/SolutionChart'
+import SolutionChart from '../../dashboard/SolutionChart'
+import ForceGraph from '../../dashboard/NetworkGraph'
 
 interface Props{
     dropdownList: string[]
@@ -38,10 +39,11 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                 <Row>
                     <LeftWrapper>
                         <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
-                        <SolutionChart />
+                        <ForceGraph/>
                     </LeftWrapper>
                     <RightWrapper>
-                        
+                        <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
+                        <SolutionChart />
                     </RightWrapper>
                 </Row>
             </Body>
@@ -85,11 +87,12 @@ const Body = styled.div`
 
 const Row = styled.div`
     display: flex;
+    gap: 2rem;
 `
 
 const LeftWrapper = styled.div`
     display: flex;
-    width: 65%;
+    width: 55%;
     max-height: 700px;
     border: 1px solid #EAEAEA;
     border-radius: 15px;
@@ -99,5 +102,10 @@ const LeftWrapper = styled.div`
 
 const RightWrapper = styled.div`
     display: flex;
-    width: 30%;
+    width: 40%;
+    max-height: 700px;
+    border: 1px solid #EAEAEA;
+    border-radius: 15px;
+    flex-direction: column;
+    padding: 24px;
 `
