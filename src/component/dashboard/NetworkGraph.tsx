@@ -1,11 +1,11 @@
 import ReactEChartsCore from 'echarts-for-react/lib/core';
 import * as echarts from 'echarts/core';
 import { GraphChart } from 'echarts/charts';
-import { TooltipComponent, LegendComponent } from 'echarts/components';
+import { LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { networkData } from './networkData';
 
-echarts.use([GraphChart, TooltipComponent, LegendComponent, CanvasRenderer]);
+echarts.use([GraphChart, LegendComponent, CanvasRenderer]);
 
 type RawNode = { id: string; color?: string; size?: number };
 type RawLink = { source: string; target: string; strength: number };
@@ -74,7 +74,7 @@ function buildFrom(raw: RawData) {
 
 export default function NetworkGraph() {
   const { nodes, links } = buildFrom(networkData);
-
+  console.log('asdasd')
   const option = {
     backgroundColor: 'transparent',
     legend: { show: false },
@@ -94,7 +94,7 @@ export default function NetworkGraph() {
         formatter: '{b}',          // name 표시
       },
       lineStyle: { width: 1, color: 'rgba(0,0,0,0.25)' },
-      emphasis: { focus: 'adjacency', lineStyle: { width: 1.6, opacity: 0.35 } },
+      emphasis: { lineStyle: { width: 1.6, opacity: 0.35 } },
       force: {
         repulsion: 180,            // 밀도: 140~220에서 조절
         edgeLength: [24, 160],     // link.value=1 → 24, =5 → 160 근처
