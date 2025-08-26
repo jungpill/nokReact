@@ -74,7 +74,7 @@ function buildFrom(raw: RawData) {
 
 export default function NetworkGraph() {
   const { nodes, links } = buildFrom(networkData);
-  console.log('asdasd')
+
   const option = {
     backgroundColor: 'transparent',
     legend: { show: false },
@@ -83,7 +83,7 @@ export default function NetworkGraph() {
       layout: 'force',
       roam: true,
       draggable: true,
-      zoom: 1.1,                  
+      zoom: 1.4,                  
       nodeScaleRatio: 0.5,         
       label: {
         show: true,

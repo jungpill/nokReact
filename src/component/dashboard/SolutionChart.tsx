@@ -1,17 +1,21 @@
-import {Radar} from 'react-chartjs-2'
-import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js'
+import { Radar } from 'react-chartjs-2'
+import {
+  Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip,
+  type ChartOptions, type ChartData
+} from 'chart.js'
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip)
+
+ChartJS.defaults.elements.line.tension = 0
 
 const SolutionChart = () => {
 
     const labels = ['접속 횟수', '누적 기록 수', '키워드 검색'] // 축 라벨(시계 방향)
 
-    // 예시 데이터 (학생 / 평균)
-    const student = [180, 150, 132]
+    const student = [180, 160, 160]
     const average = [30, 36, 150]
 
-    const data = {
+    const data: ChartData<'radar'> = {
         labels,
         datasets: [
           {
@@ -21,10 +25,10 @@ const SolutionChart = () => {
             backgroundColor: 'rgba(97, 255, 250, 0.60)',
             pointBackgroundColor: '#54e0e8',
             pointBorderColor: '#54e0e8',
-            pointRadius: 4,
+            pointRadius: 6,
             fill: true,
-            tension: 0.2,
             order: 2,
+            borderJoinStyle: 'miter', 
           },
           {
             label: '평균 학생',
@@ -33,16 +37,19 @@ const SolutionChart = () => {
             backgroundColor: 'rgba(0, 98, 255, 0.40)',
             pointBackgroundColor: '#0062FF',
             pointBorderColor: '#0062FF',
-            pointRadius: 4,
+            pointRadius: 6,
             fill: true,
-            tension: 0.2,
             order: 1,
+            borderJoinStyle: 'miter',
           },
         ],
       }
     
       const options: any = {
         responsive: true,
+        line: {
+          tension: 0,
+        },
         plugins: {
           legend: { display: true, position: 'right', labels: { usePointStyle: true } },
           tooltip: { enabled: false }, 
@@ -50,13 +57,14 @@ const SolutionChart = () => {
         scales: {
           r: {
             min: 0,
-            suggestedMax: 200, 
-            ticks: { display: false },
+            max: 200, 
+            ticks: { display: false, stepSize: 40 },
             grid: { color: 'rgba(0,0,0,0.15)', circular: true, borderDash: [10,6], lineWidth: 1 },
             angleLines: { 
                 color: 'rgba(0,0,0,0.15)',
                 borderDash: [2,3],
                 lineWidth: 1,
+
              },
             pointLabels: {
               color: '#0b0b0b',

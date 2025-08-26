@@ -5,6 +5,7 @@ import { color } from '../../../style/color'
 import LabelWithHelp from '../../common/LabelWithHelp'
 import SolutionChart from '../../dashboard/SolutionChart'
 import ForceGraph from '../../dashboard/NetworkGraph'
+import Calendar from '../../dashboard/Calendar'
 
 interface Props{
     dropdownList: string[]
@@ -44,6 +45,16 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                     <RightWrapper>
                         <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
                         <SolutionChart />
+                    </RightWrapper>
+                </Row>
+
+                <Row>
+                    <LeftWrapper>
+                        asdasdasdas
+                    </LeftWrapper>
+                    <RightWrapper>  
+                        <LabelWithHelp label="소통 현황" content="대시보드 이름을 입력해주세요." />
+                        <Calendar/>
                     </RightWrapper>
                 </Row>
             </Body>
