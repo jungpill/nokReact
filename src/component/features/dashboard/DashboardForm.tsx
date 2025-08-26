@@ -35,10 +35,9 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                     setIsDropdownActive={setIsDropdownActive}
                 />
 
-                <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
-
                 <Row>
                     <LeftWrapper>
+                        <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
                         <SolutionChart />
                     </LeftWrapper>
                     <RightWrapper>
@@ -92,7 +91,10 @@ const LeftWrapper = styled.div`
     display: flex;
     width: 65%;
     max-height: 700px;
-    border: 1px solid ${color.gray};
+    border: 1px solid #EAEAEA;
+    border-radius: 15px;
+    flex-direction: column;
+    padding: 24px;
 `
 
 const RightWrapper = styled.div`
