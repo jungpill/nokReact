@@ -6,6 +6,7 @@ import LabelWithHelp from '../../common/LabelWithHelp'
 import SolutionChart from '../../dashboard/SolutionChart'
 import ForceGraph from '../../dashboard/NetworkGraph'
 import Calendar from '../../dashboard/Calendar'
+import PieChart from '../../dashboard/PieChart'
 
 interface Props{
     dropdownList: {name: string, _id: string}[]
@@ -18,6 +19,18 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
 
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
+    const sampleData = [
+        { name: "A", count: 60 },
+        { name: "B", count: 30 },
+        { name: "C", count: 10 },
+        { name: "D", count: 5 },
+        { name: "E", count: 4 },
+        { name: "F", count: 3 },
+        { name: "G", count: 2 },
+        { name: "H", count: 2 },
+        { name: "I", count: 2 },
+        { name: "J", count: 2 },
+    ];
 
     useEffect(() => {
         for(let i of dropdownList){
@@ -58,7 +71,8 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
 
                 <Row>
                     <LeftWrapper>
-                        asdasdasdas
+                        <LabelWithHelp label="학생 현황" content="대시보드 이름을 입력해주세요." />
+                        <PieChart data={sampleData}/>
                     </LeftWrapper>
                     <RightWrapper>  
                         <LabelWithHelp label="소통 현황" content="대시보드 이름을 입력해주세요." />
