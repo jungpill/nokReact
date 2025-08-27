@@ -19,6 +19,7 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
 
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
+
     const sampleData = [
         { name: "A", count: 60 },
         { name: "B", count: 30 },
@@ -72,7 +73,7 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                 <Row>
                     <LeftWrapper>
                         <LabelWithHelp label="학생 현황" content="대시보드 이름을 입력해주세요." />
-                        <PieChart data={sampleData}/>
+                        <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
                     <RightWrapper>  
                         <LabelWithHelp label="소통 현황" content="대시보드 이름을 입력해주세요." />
@@ -121,7 +122,6 @@ const Body = styled.div`
 const Row = styled.div`
     display: flex;
     gap: 2rem;
-    max-height: 50%;
     justify-content: center;
     align-items: center;
 `
@@ -129,8 +129,8 @@ const Row = styled.div`
 const LeftWrapper = styled.div`
     display: flex;
     width: 55%;
-    max-height: 700px;
-    border: 1px solid #EAEAEA;
+    height: 500px;
+    border: 2px solid #EAEAEA;
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;
@@ -141,8 +141,8 @@ const LeftWrapper = styled.div`
 const RightWrapper = styled.div`
     display: flex;
     width: 40%;
-    max-height: 700px;
-    border: 1px solid #EAEAEA;
+    height: 500px;
+    border: 2px solid #EAEAEA;
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;

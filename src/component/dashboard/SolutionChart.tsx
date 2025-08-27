@@ -47,6 +47,7 @@ const SolutionChart = () => {
     
       const options: any = {
         responsive: true,
+        maintainAspectRatio: false,
         line: {
           tension: 0,
         },

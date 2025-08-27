@@ -1,29 +1,27 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Pie } from "react-chartjs-2";
+import { getTopSearchKeywords, getAnalytics } from "../../service/dashboard";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-interface DataItem {
-  name: string;
-  count: number;
-}
-
 interface Props {
-  data: DataItem[];
+    selectedGroupId: string
 }
 
-const PieChart: React.FC<Props> = ({ data }) => {
-  const total = data.reduce((acc, cur) => acc + cur.count, 0);
+const PieChart: React.FC<Props> = ({selectedGroupId}) => {
+
+  const [data, setData] = useState<{ text: string; search_count: number }[]>([]);  
+  const total = data.reduce((acc, cur) => acc + cur.search_count, 0);
 
   const chartData = {
-    labels: data.map((item) => item.name),
+    labels: data.map((item) => item.text),
     datasets: [
       {
         data: data.map((item) =>
-          ((item.count / total) * 100).toFixed(0) // 퍼센트
+          ((item.search_count / total) * 100).toFixed(0) // 퍼센트
         ),
         backgroundColor: [
           "#0D2F66",
@@ -64,13 +62,26 @@ const PieChart: React.FC<Props> = ({ data }) => {
           size: 14,
         },
         formatter: (value: any, context: any) => {
-
+        
           const label = context.chart.data.labels[context.dataIndex];
-          return `${label}`;
+          return value < 7 ? '' : label
         },
       },
     },
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try{
+            const result = await getTopSearchKeywords(selectedGroupId);
+        if (result) {
+            setData(result);
+        }}catch(err){
+            console.log(err)
+        }
+    };
+    fetchData();
+  }, [selectedGroupId]);
 
   return (
     <Wrapper>
@@ -80,10 +91,10 @@ const PieChart: React.FC<Props> = ({ data }) => {
         {data.map((item, index) => {
             return(
                 <Item key={index}>
-                    <label style={{fontSize: '1.25rem', fontWeight: '700', width: '30px' }}>
+                    <label style={{fontSize: '1.25rem', fontWeight: '700', width: '30px', marginRight: '10px' }}>
                         {index + 1}. 
                     </label> 
-                    {item.name}
+                    {item.text}
                 </Item>
             )
         })}
@@ -115,14 +126,16 @@ const Item = styled.div`
     font-size: 0.8rem;
     font-weight: 500;
     align-items: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: #f9f9f9;
     border-radius: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 200px;
+    height: 30px;
+    padding: 3px 5px;
 
     &:hover {
-        background-color: #f9f9f9;
+        background-color: 
     }
 `

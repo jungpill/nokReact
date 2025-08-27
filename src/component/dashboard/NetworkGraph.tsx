@@ -81,9 +81,9 @@ export default function NetworkGraph() {
     series: [{
       type: 'graph',
       layout: 'force',
-      roam: true,
+      roam: 'move',
       draggable: true,
-      zoom: 1.4,                  
+      zoom: 1.8,                  
       nodeScaleRatio: 0.5,         
       label: {
         show: true,

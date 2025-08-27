@@ -10,3 +10,23 @@ export const getCommunicationStatus = async (group_id: string) => {
         console.log(error)
     }
 }
+
+export const getTopSearchKeywords = async (group_id: string) => {
+    try{
+        const res = await instance.get(`dashboard/top_searches/${group_id}`)
+        console.log(res.data)
+        return res.data
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export const getAnalytics = async (group_id: string) => {
+    try{
+        const res = await instance.get(`dashboard/usage_analytics/${group_id}`)
+        console.log(res.data)
+        return res.data
+    }catch(error){
+        console.log(error)
+    }
+}

@@ -25,6 +25,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%;
     `
 
 const Label = styled.div`
