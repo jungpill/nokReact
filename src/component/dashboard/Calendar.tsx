@@ -3,23 +3,22 @@ import React, {useEffect, useState} from 'react'
 import {color} from '../../style/color'
 
 const Calendar: React.FC = () => {
-
+    const data = [0, 5, 74, 5, 1, 1, 9, 1, 2, 5, 4, 0, 74, 6, 2, 0, 44, 2, 5, 2, 6, 6, 6, 1, 2, 8, 4, 9, 6,]
+    console.log(data.length)
     const week = ['월', '화', '수', '목', '금', '토', '일']
 
     const today = new Date()
     const year = today.getFullYear()
-    const month = today.getMonth()
+    const month = today.getMonth() + 3
 
     const [weeksInMonth, setWeeksInMonth] = useState<number[]>([]);
 
     const lastDayOfCurrentMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfCurrentMonth = new Date(year, month, 1).getDay();
+    const adjustedFirstDay = (firstDayOfCurrentMonth === 0) ? 6 : firstDayOfCurrentMonth - 1;
     
 
     useEffect(() => {
-        
-        // 주의 시작을 '월요일'로 가정하여 요일 계산을 조정
-        const adjustedFirstDay = (firstDayOfCurrentMonth === 0) ? 6 : firstDayOfCurrentMonth - 1;
 
         // 달의 총 주(week) 수 계산
         const weekCount = Math.ceil((lastDayOfCurrentMonth + adjustedFirstDay) / 7);
@@ -28,16 +27,26 @@ const Calendar: React.FC = () => {
         setWeeksInMonth(Array.from({ length: weekCount }));
     }, [year, month]);
 
+    // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
+    // 추후 노크 개발하게 되시는 분 얼른 이직준비하세요 ㅎ 
+
 
     return(
         <Container>
-                <Week style={{marginLeft: '4rem'}}>
+                <Week style={{marginLeft: '2rem'}}>
                     {week.map(day => <DayCell key={day}>{day}</DayCell>)}
                 </Week>
 
                 {weeksInMonth.map((_, index) => <Week key={index}>
-                    <Label>{index + 1}주차</Label>
-                    
+                    <Label style={{marginRight: '0.8rem'}}>{index + 1}주차</Label>
+                    {week.map((e,index2) => {
+                        return <Item 
+                        key={index2}
+                        isAcitve={data[(index2) * (index+1)] >= 4} 
+                        style={{
+                            opacity: index === 0 && adjustedFirstDay - index2 > 0 ? 0 : ((index+1) * 7) + (index2 - 7)  >= adjustedFirstDay + lastDayOfCurrentMonth ? 0 : 1 }}
+                            />
+                    })}
                 </Week>)}
             
         </Container>    
@@ -55,7 +64,6 @@ const Container = styled.div`
 `
 
 const Week = styled.div`
-    gap: 2rem; 
     display: flex;
     flex-direction: row;
     margin-bottom: 0.75rem;
@@ -64,13 +72,15 @@ const Week = styled.div`
 const DayCell = styled.div`
     color: ${color.black}
     font-size: 1rem;
+    margin-left: 2rem;
 `
 
-const Item = styled.div`
-    background-color: black;
-    border-radius: 100px;
-    width: 2rem;
+const Item = styled.div<{isAcitve: boolean}>`
+    background-color: ${props => props.isAcitve ? '#25E8BB' : color.gray};
+    border-radius: 200%;
+    width: 1.25rem;
     heightL 2rem;
+    margin-right: 1.63rem;
 `
 
 const Column = styled.div`
