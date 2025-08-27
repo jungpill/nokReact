@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import React, {useEffect, useState} from 'react'
 import {color} from '../../style/color'
 import {getCommunicationStatus} from '../../service/dashboard'
+import Tooltip from '../common/Tooltip'
 
 interface Props{
     selectedGroupId: string
@@ -66,13 +67,21 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
                         const isValidDate = dayNumber > 0 && dayNumber <= lastDayOfCurrentMonth;
 
                         return (
-                            <Item
-                            key={dayIndex}
-                            isAcitve={isValidDate && data[dataIndex] >= 4}
-                            style={{
-                                opacity: isValidDate ? 1 : 0,
-                            }}
-                            />
+                            <Tooltip
+                                key={dayIndex}
+                                placement="top"
+                                disabled={!isValidDate}
+                                content={
+                                    <>
+                                        글 {data[dataIndex]?.posts ?? 0} 댓글 {data[dataIndex]?.comments ?? 0}
+                                    </>
+                                }
+                            >
+                                <Item
+                                    isAcitve={isValidDate && data[dataIndex] >= 4}
+                                    style={{ opacity: isValidDate ? 1 : 0 }}
+                                />
+                            </Tooltip>
                         );
                         })}
                     </Week>

@@ -5,6 +5,18 @@
   text-align: center;
 }
 
+.tippy-box {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.tippy-box[data-theme~='light'] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -40,3 +52,4 @@
 .read-the-docs {
   color: #888;
 }
+
