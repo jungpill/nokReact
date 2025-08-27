@@ -71,11 +71,11 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                 </Row>
 
                 <Row>
-                    <LeftWrapper>
+                    <LeftWrapper style={{height: '400px'}}>
                         <LabelWithHelp label="학생 현황" content="대시보드 이름을 입력해주세요." />
                         <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
-                    <RightWrapper>  
+                    <RightWrapper style={{height: '400px'}}>  
                         <LabelWithHelp label="소통 현황" content="대시보드 이름을 입력해주세요." />
                         <Calendar selectedGroupId={selectedGroupId}/>
                     </RightWrapper>
@@ -146,4 +146,6 @@ const RightWrapper = styled.div`
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;
+    justify-content: center;
+    align-items: center;
 `

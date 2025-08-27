@@ -45,8 +45,8 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
         setWeeksInMonth(Array.from({ length: weekCount }));
     }, [year, month]);
 
-    // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
-    // 추후 노크 개발하게 되시는 분 얼른 이직준비하세요 ㅎ 
+        // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
+        // 추후 노크 개발하게 되시는 분 얼른 이직준비하세요 ㅎ 
 
     return(
         <Container>
@@ -95,20 +95,21 @@ const Container = styled.div`
 const Week = styled.div`
     display: flex;
     flex-direction: row;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    align-items: center;
 `
 
 const DayCell = styled.div`
     color: ${color.black};
     font-size: 1rem;
-    margin-left: 2rem;
+    margin-left: 2.23rem;
 `
 
 const Item = styled.div<{isAcitve: boolean}>`
     background-color: ${props => props.isAcitve ? '#25E8BB' : color.gray};
     border-radius: 200%;
-    width: 1.25rem;
-    heightL 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     margin-right: 1.63rem;
 `
 const Label = styled.label`

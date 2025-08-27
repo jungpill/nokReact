@@ -46,6 +46,7 @@ const PieChart: React.FC<Props> = ({selectedGroupId}) => {
       legend: {
         display: false,
       },
+      maintainAspectRatio: false,
       tooltip: {
         callbacks: {
         label: function (context: any) {
@@ -58,15 +59,23 @@ const PieChart: React.FC<Props> = ({selectedGroupId}) => {
       datalabels: {
         color: "#fff",
         font: {
-          weight: "bold" as const,
-          size: 14,
+            weight: "bold" as const,
+            size: 14,
         },
         formatter: (value: any, context: any) => {
-        
-          const label = context.chart.data.labels[context.dataIndex];
-          return value < 7 ? '' : label
+            const label = context.chart.data.labels?.[context.dataIndex] || "";
+
+            // 1) 작은 비율이면 표시 안함
+            if (value < 7) return "";
+
+            // 2) 글자가 4자 초과면 말줄임 처리
+            if (label.length > 4) {
+            return label.substring(0, 4) + "...";
+            }
+
+            return label;
         },
-      },
+        },
     },
   };
 
