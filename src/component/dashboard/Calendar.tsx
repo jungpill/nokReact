@@ -90,6 +90,8 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
 `
 
 const Week = styled.div`
@@ -97,6 +99,7 @@ const Week = styled.div`
     flex-direction: row;
     margin-bottom: 1rem;
     align-items: center;
+    margin-left: 2rem;
 `
 
 const DayCell = styled.div`
