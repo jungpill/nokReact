@@ -1,7 +1,7 @@
 import { Radar } from 'react-chartjs-2'
 import {
   Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip,
-  type ChartOptions, type ChartData
+  type ChartData
 } from 'chart.js'
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip)

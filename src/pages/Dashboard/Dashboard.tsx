@@ -1,19 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DashboardForm from '../../component/features/dashboard/DashboardForm'
 import styled from 'styled-components'
+import {instance} from '../../service/instance'
 
 const Dashboard: React.FC = () => {
 
 
-    const dropdownList = ['1학년 1반', '1학년 2반', '1학년 3반', '1학년 4반', '1학년 5반']
-    const [dropdownValue, setDropdownValue] = useState(dropdownList[0])
-    
+    const [groups, setGroups] = useState<{_id: string, name: string}[]>([])
+    const [selectedGroup, setSelectedGroup] = useState<string>('')
+    const [selectedGroupId, setSelectedGroupId] = useState<string>('')
+
+    useEffect(() => {
+        const getGroups = async () => {
+            try{
+                const res = await instance.get('/dashboard/groups')
+                setGroups(res.data)
+                setSelectedGroup(res.data[0].name)
+                setSelectedGroupId(res.data[0]._id)
+            }catch(error){
+                console.log(error)
+            }
+        }
+        getGroups()
+    }, [])
+
     return(
         <Container>
             <DashboardForm
-                dropdownList={dropdownList}
-                dropdownValue={dropdownValue}
-                setDropdownValue={setDropdownValue}
+                dropdownList={groups}
+                dropdownValue={selectedGroup}
+                setDropdownValue={setSelectedGroup}
+                selectedGroupId={selectedGroupId}
             />
         </Container>
     )

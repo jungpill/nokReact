@@ -7,7 +7,7 @@ import { CiSearch } from "react-icons/ci";
 interface Props{
     options: string[];
     value: string;
-    onChange: (value: string) => void;
+    onChange: any; 
     isDropdownActive: boolean;
     setIsDropdownActive: (value: boolean) => void;
 }
@@ -21,11 +21,9 @@ const Dropdown: React.FC<Props> = ({options, value, onChange, isDropdownActive, 
     
       const select = (opt: string) => (e: React.MouseEvent) => {
         e.stopPropagation();
-        onChange(opt);
+        onChange(opt)
         setIsDropdownActive(false);
       };
-    
-     
 
     return(
         <Wrapper>
@@ -53,19 +51,6 @@ const Wrapper = styled.div`
   position: relative;      
   width: 150px;
   font-size: 1rem;         
-`;
-
-const Trigger = styled.button`
-  width: 100%;
-  height: 40px;
-  padding: 6px 10px;
-  border-radius: 10px;
-  border: none;
-  color: ${color.black};
-  background: ${color.gray};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
 `;
 
 const Menu = styled.div`
@@ -98,10 +83,33 @@ const SearchInput = styled.input`
     padding: 6px 8px;
     background-color: ${color.gray};
 `
+const Trigger = styled.button`
+  width: 100%;
+  height: 40px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: none;
+  color: ${color.black};
+  background: ${color.gray};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  /* 텍스트 ... 처리 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
 const Item = styled.div`
   padding: 8px 10px;
   cursor: pointer;
+
+  /* 텍스트 ... 처리 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 
   &:hover { background: ${color.gray}; }
 `;

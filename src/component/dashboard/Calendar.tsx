@@ -1,22 +1,40 @@
 import styled from 'styled-components'
 import React, {useEffect, useState} from 'react'
 import {color} from '../../style/color'
+import {getCommunicationStatus} from '../../service/dashboard'
 
-const Calendar: React.FC = () => {
-    const data = [0, 5, 74, 5, 1, 1, 9, 1, 2, 5, 4, 0, 74, 6, 2, 0, 44, 2, 5, 2, 6, 6, 6, 1, 2, 8, 4, 9, 6,]
-    console.log(data.length)
+interface Props{
+    selectedGroupId: string
+}
+
+const Calendar: React.FC<Props> = ({selectedGroupId}) => {
+    
+    const [data, setData] = useState<any[]>([])
     const week = ['월', '화', '수', '목', '금', '토', '일']
 
     const today = new Date()
     const year = today.getFullYear()
-    const month = today.getMonth() + 3
+    const month = today.getMonth()
 
     const [weeksInMonth, setWeeksInMonth] = useState<number[]>([]);
 
     const lastDayOfCurrentMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfCurrentMonth = new Date(year, month, 1).getDay();
     const adjustedFirstDay = (firstDayOfCurrentMonth === 0) ? 6 : firstDayOfCurrentMonth - 1;
-    
+
+    useEffect(() => {
+        const getCommunicationStatusData = async () => {
+            const temp:any[]= []
+            const res = await getCommunicationStatus(selectedGroupId)
+            res.map((item: any) => {
+                temp.push(item.week_of_month)
+            })
+            setData(temp)
+            console.log(res)
+        }
+
+        getCommunicationStatusData()
+    }, [selectedGroupId])
 
     useEffect(() => {
 
@@ -30,24 +48,35 @@ const Calendar: React.FC = () => {
     // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
     // 추후 노크 개발하게 되시는 분 얼른 이직준비하세요 ㅎ 
 
-
     return(
         <Container>
                 <Week style={{marginLeft: '2rem'}}>
                     {week.map(day => <DayCell key={day}>{day}</DayCell>)}
                 </Week>
 
-                {weeksInMonth.map((_, index) => <Week key={index}>
-                    <Label style={{marginRight: '0.8rem'}}>{index + 1}주차</Label>
-                    {week.map((e,index2) => {
-                        return <Item 
-                        key={index2}
-                        isAcitve={data[(index2) * (index+1)] >= 4} 
-                        style={{
-                            opacity: index === 0 && adjustedFirstDay - index2 > 0 ? 0 : ((index+1) * 7) + (index2 - 7)  >= adjustedFirstDay + lastDayOfCurrentMonth ? 0 : 1 }}
+                {weeksInMonth.map((_, weekIndex) => (
+                    <Week key={weekIndex}>
+                        <Label style={{ marginRight: '0.8rem' }}>{weekIndex + 1}주차</Label>
+                        {week.map((_, dayIndex) => {
+                        
+                        const dayNumber = weekIndex * 7 + dayIndex - adjustedFirstDay + 1;
+
+                        const dataIndex = dayNumber 
+
+                        const isValidDate = dayNumber > 0 && dayNumber <= lastDayOfCurrentMonth;
+
+                        return (
+                            <Item
+                            key={dayIndex}
+                            isAcitve={isValidDate && data[dataIndex] >= 4}
+                            style={{
+                                opacity: isValidDate ? 1 : 0,
+                            }}
                             />
-                    })}
-                </Week>)}
+                        );
+                        })}
+                    </Week>
+                ))}
             
         </Container>    
     )
@@ -70,7 +99,7 @@ const Week = styled.div`
 `
 
 const DayCell = styled.div`
-    color: ${color.black}
+    color: ${color.black};
     font-size: 1rem;
     margin-left: 2rem;
 `
@@ -81,18 +110,6 @@ const Item = styled.div<{isAcitve: boolean}>`
     width: 1.25rem;
     heightL 2rem;
     margin-right: 1.63rem;
-`
-
-const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 2rem
-
-`
-
-const Row = styled.div`
-    display: flex;
-    flex-direction: row;
 `
 const Label = styled.label`
     text-align: center;

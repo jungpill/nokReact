@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import Dropdown from '../../common/Dropdown'
 import { color } from '../../../style/color'
@@ -8,14 +8,22 @@ import ForceGraph from '../../dashboard/NetworkGraph'
 import Calendar from '../../dashboard/Calendar'
 
 interface Props{
-    dropdownList: string[]
+    dropdownList: {name: string, _id: string}[]
     dropdownValue: string
-    setDropdownValue: (value: string) => void
+    setDropdownValue: (item: string) => void
+    selectedGroupId: string
 }
 
-const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdownValue}) => {
+const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdownValue, selectedGroupId}) => {
 
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
+    const [groupNameList, setGroupNameList] = useState<string[]>([])
+
+    useEffect(() => {
+        for(let i of dropdownList){
+            setGroupNameList(prev => [...prev, i.name])
+        }
+    }, [dropdownList])
     
     return(
         <Container>
@@ -30,7 +38,7 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
 
             <Body>
                 <Dropdown
-                    options={dropdownList}
+                    options={groupNameList}
                     value={dropdownValue}
                     onChange={setDropdownValue}
                     isDropdownActive={isDropdownActive}
@@ -54,7 +62,7 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                     </LeftWrapper>
                     <RightWrapper>  
                         <LabelWithHelp label="소통 현황" content="대시보드 이름을 입력해주세요." />
-                        <Calendar/>
+                        <Calendar selectedGroupId={selectedGroupId}/>
                     </RightWrapper>
                 </Row>
             </Body>
