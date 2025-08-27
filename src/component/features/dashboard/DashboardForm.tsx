@@ -121,6 +121,9 @@ const Body = styled.div`
 const Row = styled.div`
     display: flex;
     gap: 2rem;
+    max-height: 50%;
+    justify-content: center;
+    align-items: center;
 `
 
 const LeftWrapper = styled.div`
@@ -131,6 +134,8 @@ const LeftWrapper = styled.div`
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;
+    justify-content: center;
+    align-items: center;
 `
 
 const RightWrapper = styled.div`
