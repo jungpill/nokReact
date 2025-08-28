@@ -8,6 +8,7 @@ import ForceGraph from '../../dashboard/NetworkGraph'
 import Calendar from '../../dashboard/Calendar'
 import PieChart from '../../dashboard/PieChart'
 import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
+import Badge from '../../dashboard/Badge'
 
 interface Props{
     dropdownList: {name: string, _id: string}[]
@@ -75,7 +76,10 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
                         <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  
-                        <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
+                        <div style={{display:'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
+                            <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
+                            <Badge active={3}/>
+                        </div>
                         <Calendar selectedGroupId={selectedGroupId}/>
                     </RightWrapper>
                 </Row>
@@ -127,7 +131,7 @@ const Row = styled.div`
 
 const LeftWrapper = styled.div`
     display: flex;
-    width: 55%;
+    width: 65%;
     height: 500px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
@@ -140,7 +144,7 @@ const LeftWrapper = styled.div`
 
 const RightWrapper = styled.div`
     display: flex;
-    width: 40%;
+    width: 30%;
     height: 500px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
