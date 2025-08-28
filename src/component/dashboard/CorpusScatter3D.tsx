@@ -32,7 +32,7 @@ const CorpusScatter3DFromDict: React.FC<Props> = ({
   raw,
   height = 520,
   pointSize = 6,
-  background = '#1f2228',
+  background = '#fff',
   autoRotate = true,
 }) => {
   // ⬅️ 우선순위: props.raw → 3dData.data
@@ -76,12 +76,6 @@ const CorpusScatter3DFromDict: React.FC<Props> = ({
   const option: any = useMemo(
     () => ({
       backgroundColor: background,
-      title: {
-        text: title,
-        left: 16,
-        top: 12,
-        textStyle: { color: '#e9edf1', fontWeight: 800, fontSize: 22 },
-      },
       tooltip: {
         confine: true,
         formatter: (p: any) => {
@@ -109,7 +103,7 @@ const CorpusScatter3DFromDict: React.FC<Props> = ({
         boxDepth: 180,
         boxHeight: 180,
         environment: background,
-        axisPointer: { lineStyle: { color: '#8aa1b1', opacity: 0.35 } },
+        axisPointer: { lineStyle: { color: '#000', opacity: 0.35 } },
         viewControl: {
           projection: 'perspective',
           autoRotate,
@@ -143,7 +137,7 @@ const CorpusScatter3DFromDict: React.FC<Props> = ({
         },
       ],
     }),
-    [background, title, autoRotate, pointSize, seriesData, ext]
+    [background, autoRotate, pointSize, seriesData, ext]
   )
 
   return (
@@ -169,19 +163,7 @@ function makeAxis(name: string, min: number, max: number) {
 const AutoBox = styled.div<{ $ratio?: number; $minH?: number; $maxH?: number }>`
   width: 100%;
   aspect-ratio: ${p => p.$ratio ?? (16 / 9)};   /* 예: 16:9 */
-  min-height: ${p => (p.$minH ? `${p.$minH}px` : '360px')};
-  max-height: ${p => (p.$maxH ? `${p.$maxH}px` : 'none')};
+  height: 90%;
   border-radius: 16px;
   overflow: hidden;
 `;
-const Hint = styled.div`
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  font-size: 12px;
-  color: #a9b6c6;
-  background: rgba(0, 0, 0, 0.35);
-  padding: 4px 8px;
-  border-radius: 8px;
-  pointer-events: none;
-`
