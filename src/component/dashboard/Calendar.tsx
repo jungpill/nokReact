@@ -31,7 +31,6 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
                 temp.push(item.week_of_month)
             })
             setData(temp)
-            console.log(res)
         }
 
         getCommunicationStatusData()

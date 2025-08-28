@@ -9,8 +9,6 @@ interface Props {
 
 const LabelWithHelp: React.FC<Props> = ({label, content}) => {
 
-    console.log(content)
-
     return (
         <Wrapper>
             <Label>{label}</Label>

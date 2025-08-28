@@ -3,21 +3,27 @@ import {
   Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip,
   type ChartData
 } from 'chart.js'
+import React from 'react'
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip)
 
 ChartJS.defaults.elements.line.tension = 0
 
-const SolutionChart = () => {
+interface Props{
+  chartData: any
+}
 
-    const labels = ['접속 횟수', '누적 기록 수', '키워드 검색'] // 축 라벨(시계 방향)
+const SolutionChart: React.FC<Props> = ({chartData}) => {
 
-    const student = [180, 160, 160]
+    const labels = ['접속 횟수', '누적 기록 수', '키워드 검색'] 
+
+    const student = [chartData.login_count, chartData.article_count, chartData.search_count]
     const average = [30, 36, 150]
 
     const data: ChartData<'radar'> = {
         labels,
         datasets: [
+          /*
           {
             label: '해당 학생',
             data: student,
@@ -29,10 +35,10 @@ const SolutionChart = () => {
             fill: true,
             order: 2,
             borderJoinStyle: 'miter', 
-          },
+          },*/
           {
             label: '평균 학생',
-            data: average,
+            data: student,
             borderColor: '#1b56ff',
             backgroundColor: 'rgba(0, 98, 255, 0.40)',
             pointBackgroundColor: '#0062FF',

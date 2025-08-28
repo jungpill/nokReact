@@ -12,10 +12,11 @@ interface Props{
     dropdownList: {name: string, _id: string}[]
     dropdownValue: string
     setDropdownValue: (item: string) => void
-    selectedGroupId: string
+    selectedGroupId: string;
+    chartData: any;
 }
 
-const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdownValue, selectedGroupId}) => {
+const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, setDropdownValue, selectedGroupId}) => {
 
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
@@ -66,7 +67,7 @@ const DashboardForm: React.FC<Props> = ({dropdownList, dropdownValue, setDropdow
                     </LeftWrapper>
                     <RightWrapper>
                         <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
-                        <SolutionChart />
+                        <SolutionChart chartData={chartData}/>
                     </RightWrapper>
                 </Row>
 
