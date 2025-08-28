@@ -46,7 +46,7 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
     }, [year, month]);
 
         // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
-        // 추후 노크 개발하게 되시는 분 얼른 이직준비하세요 ㅎ 
+        // 추후 노크 개발하게 되시는 분 하루빨리 이직준비하세요 ㅎ 
 
     return(
         <Container>

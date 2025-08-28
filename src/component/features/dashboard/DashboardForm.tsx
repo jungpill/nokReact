@@ -23,19 +23,6 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
     const [groupNameList, setGroupNameList] = useState<string[]>([])
     const [selectedTab, setSelectedTab] = useState<'데이터 연결망' | '코퍼스 분석'>('데이터 연결망')
 
-    const sampleData = [
-        { name: "A", count: 60 },
-        { name: "B", count: 30 },
-        { name: "C", count: 10 },
-        { name: "D", count: 5 },
-        { name: "E", count: 4 },
-        { name: "F", count: 3 },
-        { name: "G", count: 2 },
-        { name: "H", count: 2 },
-        { name: "I", count: 2 },
-        { name: "J", count: 2 },
-    ];
-
     useEffect(() => {
         for(let i of dropdownList){
             setGroupNameList(prev => [...prev, i.name])
@@ -64,7 +51,7 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
 
                 <Row>
                     <LeftWrapper>
-                        <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
+                        <LabelWithHelp label="대시보드 이름" content={selectedTab === '데이터 연결망' ? '작성된 문서에 대한 Co-occurrence 분석결과 입니다. 단어간 연관도에 따라 연관관계가 표시되어있습니다.' : '검색 키워드를 임베딩하여 벡터공간에 나타낸 결과입니다. 연관도에 따라 서로 밀접하게 위치하고 있습니다.'} width={400} />
                         <div style={{display:'flex', flexDirection: 'row', width: '100%', justifyContent: 'flex-start', gap: '10px'}}>
                             <Tab isActive={selectedTab==='데이터 연결망'} onClick={() => setSelectedTab('데이터 연결망')}>
                                 데이터 연결망
@@ -77,18 +64,18 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
                         {selectedTab === '데이터 연결망' ? <ForceGraph/> : <CorpusScatter3DFromDict/>}
                     </LeftWrapper>
                     <RightWrapper>
-                        <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
+                        <LabelWithHelp label="솔루션 사용 분석" content="그룹별 학생의 활동량을 제공합니다." width={300}/>
                         <SolutionChart chartData={chartData}/>
                     </RightWrapper>
                 </Row>
 
                 <Row>
                     <LeftWrapper style={{height: '400px'}}>
-                        <LabelWithHelp label="학생 현황" content="대시보드 이름을 입력해주세요." />
+                        <LabelWithHelp label="학생 현황" content="그룹별 가장 많이 검색된 키워드를 보여줍니다." width={350}/>
                         <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  
-                        <LabelWithHelp label="소통 현황" content="대시보드 이름을 입력해주세요." />
+                        <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
                         <Calendar selectedGroupId={selectedGroupId}/>
                     </RightWrapper>
                 </Row>
@@ -174,4 +161,5 @@ const Tab = styled.div<{isActive: boolean}>`
     padding: 5px;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 `
