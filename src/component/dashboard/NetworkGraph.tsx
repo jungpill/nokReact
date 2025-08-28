@@ -83,7 +83,7 @@ export default function NetworkGraph() {
       layout: 'force',
       roam: 'move',
       draggable: true,
-      zoom: 1.8,                  
+      zoom: 1.4,                  
       nodeScaleRatio: 0.5,         
       label: {
         show: true,

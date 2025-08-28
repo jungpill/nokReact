@@ -7,6 +7,7 @@ import SolutionChart from '../../dashboard/SolutionChart'
 import ForceGraph from '../../dashboard/NetworkGraph'
 import Calendar from '../../dashboard/Calendar'
 import PieChart from '../../dashboard/PieChart'
+import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
 
 interface Props{
     dropdownList: {name: string, _id: string}[]
@@ -20,6 +21,7 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
 
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
+    const [selectedTab, setSelectedTab] = useState<'데이터 연결망' | '코퍼스 분석'>('데이터 연결망')
 
     const sampleData = [
         { name: "A", count: 60 },
@@ -63,7 +65,16 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
                 <Row>
                     <LeftWrapper>
                         <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
-                        <ForceGraph/>
+                        <div style={{display:'flex', flexDirection: 'row', width: '100%', justifyContent: 'flex-start', gap: '10px'}}>
+                            <Tab isActive={selectedTab==='데이터 연결망'} onClick={() => setSelectedTab('데이터 연결망')}>
+                                데이터 연결망
+                            </Tab>
+                            <Tab isActive={selectedTab==='코퍼스 분석'} onClick={() => setSelectedTab('코퍼스 분석')}>
+                                코퍼스 분석
+                            </Tab>
+                        </div>
+
+                        {selectedTab === '데이터 연결망' ? <ForceGraph/> : <CorpusScatter3DFromDict/>}
                     </LeftWrapper>
                     <RightWrapper>
                         <LabelWithHelp label="대시보드 이름" content="대시보드 이름을 입력해주세요." />
@@ -151,4 +162,16 @@ const RightWrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1rem;
+`
+
+const Tab = styled.div<{isActive: boolean}>`
+    display: flex;
+    width: 130px;
+    border-radius: 5px;
+    background-color: ${(props) => props.isActive ? '#35B0E6' : 'black'};
+    color: white;
+    font-size: 12px;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
 `
