@@ -116,7 +116,7 @@ export default PieChart;
 
 const Wrapper = styled.div`
     width: 300px;
-    height: 300px;
+    height: 280px;
     margin: 20px;
     display: flex;
     justify-content: center;

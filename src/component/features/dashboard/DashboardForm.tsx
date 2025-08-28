@@ -137,6 +137,7 @@ const LeftWrapper = styled.div`
     padding: 24px;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
 `
 
 const RightWrapper = styled.div`
@@ -149,4 +150,5 @@ const RightWrapper = styled.div`
     padding: 24px;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
 `
