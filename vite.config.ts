@@ -3,8 +3,11 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  // Flask가 실제로 서빙하는 정적 경로에 맞춰줌
+  base: '/static/react/dist/',
   build: {
-    manifest: true,   // <-- 해시 파일 자동 주입에 사용
     outDir: 'dist',
+    manifest: true,
+    emptyOutDir: true,
   },
 })
