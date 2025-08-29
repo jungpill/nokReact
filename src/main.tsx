@@ -5,10 +5,9 @@ import Dashboard from './pages/Dashboard/Dashboard'
 function MyPage() { return <div>MyPage</div> }
 
 createRoot(document.getElementById('react-root')!).render(
-  <BrowserRouter basename="/app">
+  <BrowserRouter basename="/dashboard">
     <Routes>
       <Route path="/" element={<Dashboard/>} />
-      <Route path="/mypage" element={<MyPage />} />
     </Routes>
   </BrowserRouter>
 )
