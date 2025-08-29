@@ -51,7 +51,6 @@ const Wrapper = styled.div`
   position: relative;      
   width: 150px;
   font-size: 1rem;         
-  margin-left: 1rem;
 `;
 
 const Menu = styled.div`

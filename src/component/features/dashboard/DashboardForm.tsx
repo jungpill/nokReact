@@ -76,7 +76,7 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
                         <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  
-                        <div style={{display:'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
+                        <div style={{display:'flex', flexDirection: 'row', width: '100%'}}>
                             <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
                             <Badge active={3}/>
                         </div>
@@ -99,6 +99,8 @@ const Container = styled.div`
 
 const Header = styled.div`
     gap: 0.75rem;
+    width: 100%;
+    padding: 2rem;
 `
 
 const Title = styled.h1`
@@ -125,13 +127,12 @@ const Body = styled.div`
 const Row = styled.div`
     display: flex;
     gap: 2rem;
-    justify-content: center;
     align-items: center;
 `
 
 const LeftWrapper = styled.div`
     display: flex;
-    width: 65%;
+    width: 55%;
     height: 500px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
@@ -140,6 +141,10 @@ const LeftWrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1rem;
+
+    @media(max-width: 1800px){  
+        width: 50%;
+    }
 `
 
 const RightWrapper = styled.div`
@@ -153,6 +158,11 @@ const RightWrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1rem;
+
+
+    @media(max-width: 1800px){  
+        width: 40%;
+    }
 `
 
 const Tab = styled.div<{isActive: boolean}>`
@@ -166,4 +176,5 @@ const Tab = styled.div<{isActive: boolean}>`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    font-size: 14px;
 `

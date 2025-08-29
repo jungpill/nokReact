@@ -61,6 +61,7 @@ const Container = styled.div<{borderColor: string, boxShadow: string, background
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
+    margin-right: 15%;
 
     border-radius: 5px;
     border: 1px solid ${p => p.borderColor};

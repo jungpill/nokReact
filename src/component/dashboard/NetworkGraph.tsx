@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from 'react'
 import ReactEChartsCore from 'echarts-for-react/lib/core';
 import * as echarts from 'echarts/core';
 import { GraphChart } from 'echarts/charts';
@@ -83,21 +84,21 @@ export default function NetworkGraph() {
       layout: 'force',
       roam: 'move',
       draggable: true,
-      zoom: 1.4,                  
-      nodeScaleRatio: 0.5,         
+      zoom: 1.4,
+      nodeScaleRatio: 0.5,
       label: {
         show: true,
         position: 'bottom',
         offset: [0, 8],
         color: '#000',
         fontWeight: 700,
-        formatter: '{b}',          // name 표시
+        formatter: '{b}',
       },
       lineStyle: { width: 1, color: 'rgba(0,0,0,0.25)' },
       emphasis: { lineStyle: { width: 1.6, opacity: 0.35 } },
       force: {
-        repulsion: 180,            // 밀도: 140~220에서 조절
-        edgeLength: [24, 160],     // link.value=1 → 24, =5 → 160 근처
+        repulsion: 180,
+        edgeLength: [24, 160],
         friction: 0.25,
         gravity: 0.05,
       },
@@ -106,5 +107,28 @@ export default function NetworkGraph() {
     }]
   };
 
-  return <ReactEChartsCore echarts={echarts} option={option} style={{ width: '100%', height: 520 }} />;
+  const chartRef = useRef<ReactEChartsCore>(null);
+
+  // Ensure proper sizing on mount and when container becomes visible
+  useEffect(() => {
+    const inst = chartRef.current?.getEchartsInstance?.();
+    // Try immediate resize
+    inst?.resize();
+    // Defer a resize to next tick (layout settled)
+    const t1 = setTimeout(() => inst?.resize(), 0);
+    // And another after images/fonts load
+    const t2 = setTimeout(() => inst?.resize(), 150);
+
+    // Window resize handler
+    const onResize = () => inst?.resize();
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
+  return <ReactEChartsCore ref={chartRef} echarts={echarts} option={option} style={{ width: '100%', height: 520 }} />;
 }

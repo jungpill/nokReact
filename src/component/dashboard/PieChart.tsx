@@ -115,7 +115,7 @@ const PieChart: React.FC<Props> = ({selectedGroupId}) => {
 export default PieChart;
 
 const Wrapper = styled.div`
-    width: 300px;
+    width: 100%;
     height: 280px;
     margin: 20px;
     display: flex;
@@ -143,6 +143,7 @@ const Item = styled.div`
     min-width: 200px;
     height: 30px;
     padding: 3px 5px;
+    width: 100%;
 
     &:hover {
         background-color: 
