@@ -52,7 +52,6 @@ const uiDots: Plugin<'radar'> = {
   },
 }
 
-/** ---------- 배지(파란 동그라미 + 숫자) : 축 안쪽에 말풍선 ---------- */
 const valueBadges: Plugin<'radar'> = {
   id: 'valueBadges',
   afterDatasetsDraw(chart, _args, opts: any) {

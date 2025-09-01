@@ -3,6 +3,7 @@ import DashboardForm from '../../component/features/dashboard/DashboardForm'
 import styled from 'styled-components'
 import {instance} from '../../service/instance'
 import { getAnalytics } from '../../service/dashboard'
+import { getTopSearchKeywords } from '../../service/dashboard'
 
 const Dashboard: React.FC = () => {
 
@@ -11,6 +12,7 @@ const Dashboard: React.FC = () => {
     const [selectedGroup, setSelectedGroup] = useState<string>('')
     const [selectedGroupId, setSelectedGroupId] = useState<string>('')
     const [chartData, setChartData] = useState<any>({});
+    const [pieChartData, setPieChartData] = useState<any>([]);
 
     useEffect(() => {
         const getGroups = async () => {
@@ -28,11 +30,9 @@ const Dashboard: React.FC = () => {
 
     useEffect(() => {
         if (!selectedGroupId) return
-
         const getChartData = async () => {
             try{
                 const res = await getAnalytics(selectedGroupId);
-                console.log(res)
                 setChartData(res)
             }catch(err){
                 console.error(err)
@@ -41,14 +41,31 @@ const Dashboard: React.FC = () => {
         getChartData()
     },[selectedGroupId])
 
+    useEffect(() => {
+        if (!selectedGroupId) return
+
+        const fetchData = async () => {
+          try{
+                const result = await getTopSearchKeywords(selectedGroupId);
+            if (result) {
+                setPieChartData(result);
+            }}catch(err){
+                console.log(err)
+            }
+        };
+        fetchData();
+      }, [selectedGroupId]);
+
     return(
         <Container>
             <DashboardForm
                 dropdownList={groups}
                 dropdownValue={selectedGroup}
                 setDropdownValue={setSelectedGroup}
+                setSelectedGroupId={setSelectedGroupId}
                 selectedGroupId={selectedGroupId}
                 chartData={chartData}
+                pieChartData={pieChartData}
             />
         </Container>
     )

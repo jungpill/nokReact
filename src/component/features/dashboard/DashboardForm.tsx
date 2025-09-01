@@ -9,16 +9,19 @@ import Calendar from '../../dashboard/Calendar'
 import PieChart from '../../dashboard/PieChart'
 import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
 import Badge from '../../dashboard/Badge'
+import test from '../../../assets/react.svg';
 
 interface Props{
     dropdownList: {name: string, _id: string}[]
     dropdownValue: string
     setDropdownValue: (item: string) => void
     selectedGroupId: string;
+    setSelectedGroupId: (item: string) => void;
     chartData: any;
+    pieChartData: any;
 }
 
-const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, setDropdownValue, selectedGroupId}) => {
+const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownList, dropdownValue, setDropdownValue, selectedGroupId}) => {
 
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
@@ -43,11 +46,12 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
 
             <Body>
                 <Dropdown
-                    options={groupNameList}
+                    options={dropdownList}
                     value={dropdownValue}
                     onChange={setDropdownValue}
                     isDropdownActive={isDropdownActive}
                     setIsDropdownActive={setIsDropdownActive}
+                    setSelectedGroupId={setSelectedGroupId}
                 />
 
                 <Row>
@@ -65,14 +69,13 @@ const DashboardForm: React.FC<Props> = ({chartData,dropdownList, dropdownValue, 
                         {selectedTab === '데이터 연결망' ? <ForceGraph/> : <CorpusScatter3DFromDict/>}
                     </LeftWrapper>
                     <RightWrapper>
-                        <LabelWithHelp label="솔루션 사용 분석" content="그룹별 학생의 활동량을 제공합니다." width={300}/>
-                        <SolutionChart chartData={chartData}/>
+                        {chartData.login_count !== 0 && chartData.article_count !== 0 && chartData.search_count !== 0  ? <SolutionChart chartData={chartData}/> : <img src={test} alt="test" style={{width: '100%', height: '100%'}}/>}
                     </RightWrapper>
                 </Row>
 
                 <Row>
                     <LeftWrapper style={{height: '400px'}}>
-                        <LabelWithHelp label="학생 현황" content="그룹별 가장 많이 검색된 키워드를 보여줍니다." width={350}/>
+                        <LabelWithHelp label="그룹별 키워드" content="그룹별 가장 많이 검색된 키워드를 보여줍니다." width={350}/>
                         <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  

@@ -1,27 +1,29 @@
 import styled from "styled-components";
 import React from "react";
-import {color} from "../../style/color";``
+import {color} from "../../style/color";
 import { AiOutlineCaretUp} from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 
 interface Props{
-    options: string[];
+    options: {name: string, _id: string}[];
     value: string;
     onChange: any; 
     isDropdownActive: boolean;
     setIsDropdownActive: (value: boolean) => void;
+    setSelectedGroupId: (item: string) => void;
 }
 
-const Dropdown: React.FC<Props> = ({options, value, onChange, isDropdownActive, setIsDropdownActive}) => {
+const Dropdown: React.FC<Props> = ({setSelectedGroupId,options, value, onChange, isDropdownActive, setIsDropdownActive}) => {
 
     const toggle: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation();
         setIsDropdownActive(!isDropdownActive);
       };
     
-      const select = (opt: string) => (e: React.MouseEvent) => {
+      const select = (opt: {name: string, _id: string}) => (e: React.MouseEvent) => {
         e.stopPropagation();
-        onChange(opt)
+        onChange(opt.name)
+        setSelectedGroupId(opt._id)
         setIsDropdownActive(false);
       };
 
@@ -35,8 +37,8 @@ const Dropdown: React.FC<Props> = ({options, value, onChange, isDropdownActive, 
                         <SearchIcon />
                     </SearchWrapper>
                 {options.map((opt) => (
-                    <Item key={opt} onClick={select(opt)} role="option">
-                    {opt}
+                    <Item key={opt._id} onClick={select(opt)} role="option">
+                    {opt.name}
                     </Item>
                 ))}
                 </Menu>
