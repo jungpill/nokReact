@@ -1,14 +1,15 @@
 import styled from 'styled-components'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {color} from '../../style/color'
 import {getCommunicationStatus} from '../../service/dashboard'
 import Tooltip from '../common/Tooltip'
 
 interface Props{
     selectedGroupId: string
+    onWeekTotalChange?: (weekTotal: number) => void
 }
 
-const Calendar: React.FC<Props> = ({selectedGroupId}) => {
+const Calendar: React.FC<Props> = ({selectedGroupId, onWeekTotalChange}) => {
     
     const [data, setData] = useState<any[]>([])
     const week = ['월', '화', '수', '목', '금', '토', '일']
@@ -45,8 +46,31 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
         setWeeksInMonth(Array.from({ length: weekCount }));
     }, [year, month]);
 
-        // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
-        // 추후 노크 개발하게 되시는 분 하루빨리 이직준비하세요 ㅎ 
+    const todayDate = today.getDate();
+    const currentWeekIndex = Math.floor((todayDate + adjustedFirstDay - 1) / 7);
+
+    // 이번 주 월요일(달력 그리드 기준 dayNumber)과 일요일
+    const monday = Math.max(1, currentWeekIndex * 7 - adjustedFirstDay + 1);
+    const sunday = Math.min(lastDayOfCurrentMonth, monday + 6);
+
+    // ✅ 이번 주 글/댓글 합계 (달력 데이터 구조 그대로 사용)
+    let weekPosts = 0;
+    let weekComments = 0;
+    for (let d = monday; d <= sunday; d++) {
+    weekPosts += data[d]?.posts ?? 0;
+    weekComments += data[d]?.comments ?? 0;
+    }
+    const weekTotal = weekPosts + weekComments;
+
+    // weekTotal이 변경될 때마다 부모 컴포넌트에 알림
+    useEffect(() => {
+        if (onWeekTotalChange) {
+            onWeekTotalChange(weekTotal);
+        }
+    }, [weekTotal, onWeekTotalChange]);
+
+    // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
+    // 추후 노크 개발하게 되시는 분 하루빨리 이직준비하세요 ㅎ 
 
     return(
         <Container>
@@ -56,7 +80,7 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
 
                 {weeksInMonth.map((_, weekIndex) => (
                     <Week key={weekIndex}>
-                        <Label style={{ marginRight: '0.8rem' }}>{weekIndex + 1}주차</Label>
+                        <Label style={{ marginRight: '0.8rem', minWidth: '48px' }}>{weekIndex + 1}주차</Label>
                         {week.map((_, dayIndex) => {
                         
                         const dayNumber = weekIndex * 7 + dayIndex - adjustedFirstDay + 1;
@@ -72,12 +96,12 @@ const Calendar: React.FC<Props> = ({selectedGroupId}) => {
                                 disabled={!isValidDate}
                                 content={
                                     <>
-                                        글 {data[dataIndex]?.posts ?? 0} 댓글 {data[dataIndex]?.comments ?? 0}
+                                       {dataIndex} 글 {data[dataIndex]?.posts ?? 0} 댓글 {data[dataIndex]?.comments ?? 0}
                                     </>
                                 }
                             >
                                 <Item
-                                    isAcitve={isValidDate && data[dataIndex] >= 4}
+                                    isAcitve={data[dataIndex]?.posts + data[dataIndex]?.comments >= 1}
                                     style={{ opacity: isValidDate ? 1 : 0 }}
                                 />
                             </Tooltip>

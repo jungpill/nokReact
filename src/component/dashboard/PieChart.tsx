@@ -4,7 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Pie } from "react-chartjs-2";
 import { getTopSearchKeywords, getAnalytics } from "../../service/dashboard";
-import test from '../../assets/react.svg';
+import pieChartNoData from "../../assets/pieChart.png";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -97,7 +97,29 @@ const PieChart: React.FC<Props> = ({selectedGroupId}) => {
 
   return (
     <Wrapper>
-      {data.length > 0 ? <Pie data={chartData} options={options} /> : <img src={test} alt="test" style={{width: '100%', height: '100%'}}/>}
+      {data.length > 0 ? 
+      <>
+      <Pie data={chartData} options={options} />
+      <TopTenList>
+        {data.map((item, index) => {
+            return(
+                <Item key={index}>
+                    {item.text}
+                </Item>
+            )
+        })}
+      </TopTenList>
+      </>
+       : 
+      <img 
+      src={pieChartNoData} 
+      alt="test" 
+      style={{
+        width: '100%',
+         height: '100%',
+         objectFit: 'contain'
+        }}
+      />}
     </Wrapper>
   );
 };

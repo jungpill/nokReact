@@ -9,7 +9,7 @@ import Calendar from '../../dashboard/Calendar'
 import PieChart from '../../dashboard/PieChart'
 import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
 import Badge from '../../dashboard/Badge'
-import test from '../../../assets/react.svg';
+import solutionChartNoData from "../../../assets/solutionChart.png"
 
 interface Props{
     dropdownList: {name: string, _id: string}[]
@@ -26,6 +26,11 @@ const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownLi
     const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
     const [selectedTab, setSelectedTab] = useState<'데이터 연결망' | '코퍼스 분석'>('데이터 연결망')
+    const [weekTotal, setWeekTotal] = useState<number>(0)
+
+    const handleWeekTotalChange = (total: number) => {
+        setWeekTotal(total)
+    }
 
     useEffect(() => {
         for(let i of dropdownList){
@@ -69,7 +74,17 @@ const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownLi
                         {selectedTab === '데이터 연결망' ? <ForceGraph/> : <CorpusScatter3DFromDict/>}
                     </LeftWrapper>
                     <RightWrapper>
-                        {chartData.login_count !== 0 && chartData.article_count !== 0 && chartData.search_count !== 0  ? <SolutionChart chartData={chartData}/> : <img src={test} alt="test" style={{width: '100%', height: '100%'}}/>}
+                        {chartData.login_count !== 0 && chartData.article_count !== 0 && chartData.search_count !== 0  ? 
+                        <>
+                        <LabelWithHelp label="솔루션 사용 분석" content="그룹별 활동량을 보여줍니다." width={250}/>
+                        <SolutionChart chartData={chartData}/>
+                        </>: 
+                        <>
+                        <BoldText>
+                            데이터가 존재하지 않습니다.
+                        </BoldText>
+                        <img src={solutionChartNoData} alt="test" style={{objectFit: 'contain',width: '100%', height: '100%'}}/>
+                        </>}
                     </RightWrapper>
                 </Row>
 
@@ -81,9 +96,9 @@ const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownLi
                     <RightWrapper style={{height: '400px'}}>  
                         <div style={{display:'flex', flexDirection: 'row', width: '100%'}}>
                             <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
-                            <Badge active={3}/>
+                            <Badge active={weekTotal}/>
                         </div>
-                        <Calendar selectedGroupId={selectedGroupId}/>
+                        <Calendar selectedGroupId={selectedGroupId} onWeekTotalChange={handleWeekTotalChange}/>
                     </RightWrapper>
                 </Row>
             </Body>
@@ -180,4 +195,10 @@ const Tab = styled.div<{isActive: boolean}>`
     justify-content: center;
     cursor: pointer;
     font-size: 14px;
+`
+
+const BoldText = styled.p`
+    position: absolute;
+    font-size: 18px;
+    font-weight: 700;
 `
