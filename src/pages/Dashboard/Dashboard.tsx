@@ -1,81 +1,128 @@
-import React, { useState, useEffect } from 'react'
-import DashboardForm from '../../component/features/dashboard/DashboardForm'
-import styled from 'styled-components'
-import {instance} from '../../service/instance'
-import { getAnalytics } from '../../service/dashboard'
-import { getTopSearchKeywords } from '../../service/dashboard'
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import DashboardForm from "../../component/features/dashboard/DashboardForm";
+import { 
+  getGroupList, 
+  getStudentList, 
+  getAnalytics, 
+  getTopSearchKeywords, 
+  getSolutionUsage,
+  getWorldCloud,
+  getNoteUsage,
+  test
+} from "../../service/dashboard"; 
 
 const Dashboard: React.FC = () => {
+  const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
+  const [students, setStudents] = useState<{ _id: string; student_id: string; student_name: string }[]>([]);
 
+  const [selectedGroup, setSelectedGroup] = useState<string>("");
+  const [selectedGroupId, setSelectedGroupId] = useState<string>("");
 
-    const [groups, setGroups] = useState<{_id: string, name: string}[]>([])
-    const [selectedGroup, setSelectedGroup] = useState<string>('')
-    const [selectedGroupId, setSelectedGroupId] = useState<string>('')
-    const [chartData, setChartData] = useState<any>({});
-    const [pieChartData, setPieChartData] = useState<any>([]);
+  const [selectedStudent, setSelectedStudent] = useState<string>("");
+  const [selectedStudentId, setSelectedStudentId] = useState<string>("");
 
-    useEffect(() => {
-        const getGroups = async () => {
-            try{
-                const res = await instance.get('/dashboard/groups')
-                setGroups(res.data)
-                setSelectedGroup(res.data[0].name)
-                setSelectedGroupId(res.data[0]._id)
-            }catch(error){
-                console.log(error)
-            }
-        }
-        getGroups()
-    }, [])
+  const [chartData, setChartData] = useState<any>(null);
+  const [pieChartData, setPieChartData] = useState<any>(null);
 
-    useEffect(() => {
-        if (!selectedGroupId) return
-        const getChartData = async () => {
-            try{
-                const res = await getAnalytics(selectedGroupId);
-                setChartData(res)
-            }catch(err){
-                console.error(err)
-            }
-        }
-        getChartData()
-    },[selectedGroupId])
+  const [noteUsage, setNoteUsage] = useState<any>(null);
 
-    useEffect(() => {
-        if (!selectedGroupId) return
+  // 그룹 목록 가져오기
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const res = await getGroupList();
+        setGroups(res.groups);
+        setSelectedGroup(res.groups[0].name);
+        setSelectedGroupId(res.groups[0].id);
 
-        const fetchData = async () => {
-          try{
-                const result = await getTopSearchKeywords(selectedGroupId);
-            if (result) {
-                setPieChartData(result);
-            }}catch(err){
-                console.log(err)
-            }
-        };
-        fetchData();
-      }, [selectedGroupId]);
+        // 기본 학생 세팅
+        setSelectedStudent(res.default.student.name);
+        setSelectedStudentId(res.default.student.id);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchGroups();
+  }, []);
 
-    return(
-        <Container>
-            <DashboardForm
-                dropdownList={groups}
-                dropdownValue={selectedGroup}
-                setDropdownValue={setSelectedGroup}
-                setSelectedGroupId={setSelectedGroupId}
-                selectedGroupId={selectedGroupId}
-                chartData={chartData}
-                pieChartData={pieChartData}
-            />
-        </Container>
-    )
-}
+  // 그룹 선택 → 학생 목록 가져오기
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const res = await getStudentList(selectedGroupId);
+        console.log(res)
+        setStudents(res.students);
+        setSelectedStudent(res.students[0].student_name)
+        setSelectedStudentId(res.students[0].student_id)
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchStudents();
+  }, [selectedGroupId]);
 
-export default Dashboard
+  useEffect(() => {
+    if (!selectedGroupId) return;
+    const fetchAnalytics = async () => {
+      try {
+        const res = await getSolutionUsage(selectedStudentId);
+        setChartData(res);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchAnalytics();
+  }, [selectedStudentId]);
+
+  useEffect(() => {
+    if (!selectedGroupId) return;
+    const fetchTopKeywords = async () => {
+      try {
+        const res = await getWorldCloud(selectedStudentId);
+        setPieChartData(res.img_url);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTopKeywords();
+  }, [selectedStudentId]);
+
+  useEffect(() => {
+    if (!selectedGroupId) return;
+    const fetchNoteUsage = async () => {
+      const res = await getNoteUsage(selectedStudentId);
+      setNoteUsage(res);
+    };
+    fetchNoteUsage();
+  }, [selectedStudentId,]);
+
+  return (
+    <Container>
+      <DashboardForm
+        groupList={groups}
+        studentList={students}
+        selectedGroup={selectedGroup}
+        selectedGroupId={selectedGroupId}
+        setSelectedGroup={setSelectedGroup}
+        setSelectedGroupId={setSelectedGroupId}
+        selectedStudent={selectedStudent}
+        selectedStudentId={selectedStudentId}
+        setSelectedStudent={setSelectedStudent}
+        setSelectedStudentId={setSelectedStudentId}
+        chartData={chartData}
+        pieChartData={pieChartData}
+        noteUsage={noteUsage}
+      />
+    </Container>
+  );
+};
+
+export default Dashboard;
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;

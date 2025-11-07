@@ -9,29 +9,90 @@ import Calendar from '../../dashboard/Calendar'
 import PieChart from '../../dashboard/PieChart'
 import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
 import Badge from '../../dashboard/Badge'
-import test from '../../../assets/react.svg';
+import solution from '../../../assets/solution.png'
+import MonthlyNoteUsageChart from '../../dashboard/NoteUsage'
+import note from '../../../assets/note.png'
+import wordcloud from '../../../assets/wordCloud.png'
 
-interface Props{
-    dropdownList: {name: string, _id: string}[]
-    dropdownValue: string
-    setDropdownValue: (item: string) => void
+interface Group {
+    id: string;
+    name: string;
+  }
+  
+  interface Student {
+    _id: string;
+    student_id: string;
+    student_name: string;
+  }
+  
+  interface Props {
+    groupList: Group[];
+    studentList: Student[];
+    selectedGroup: string;
     selectedGroupId: string;
-    setSelectedGroupId: (item: string) => void;
+    setSelectedGroup: (name: string) => void;
+    setSelectedGroupId: (id: string) => void;
+    selectedStudent: string;
+    selectedStudentId: string;
+    setSelectedStudent: (name: string) => void;
+    setSelectedStudentId: (id: string) => void;
     chartData: any;
     pieChartData: any;
-}
+    noteUsage: any;
+  }
 
-const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownList, dropdownValue, setDropdownValue, selectedGroupId}) => {
+const DashboardForm: React.FC<Props> = ({
+    groupList,
+    studentList,
+    selectedGroup,
+    selectedGroupId,
+    setSelectedGroup,
+    setSelectedGroupId,
+    selectedStudent,
+    selectedStudentId,
+    setSelectedStudent,
+    setSelectedStudentId,
+    chartData,
+    pieChartData,
+    noteUsage,
+}) => {
 
-    const [isDropdownActive, setIsDropdownActive] = useState<boolean>(false)
+    const [isGroupDropdownActive, setIsGroupDropdownActive] = useState<boolean>(false)
+    const [isStudentDropdownActive, setIsStudentDropdownActive] = useState<boolean>(false)
     const [groupNameList, setGroupNameList] = useState<string[]>([])
     const [selectedTab, setSelectedTab] = useState<'데이터 연결망' | '코퍼스 분석'>('데이터 연결망')
+    const [weekTotal, setWeekTotal] = useState<number>(0)
+
+    const handleWeekTotalChange = (total: number) => {
+        setWeekTotal(total)
+    }
 
     useEffect(() => {
-        for(let i of dropdownList){
+        for(let i of groupList){
             setGroupNameList(prev => [...prev, i.name])
         }
-    }, [dropdownList])
+    }, [groupList])
+    
+    const test = {
+        "monthly_access_counts": {
+            "average_student_access_count": 16,
+            "student_access_count": 0
+        },
+        "monthly_keyword_search_counts": {
+            "average_student_keyword_search_count": 26,
+            "student_keyword_search_count": 20
+        },
+        "monthly_note_usage_counts": {
+            "average_student_note_usage_count": 19,
+            "student_note_usage_count": 19
+        }
+    }
+
+    const isAllZero = (payload?: { note_usage_data?: Record<string, number | string> }) => {
+        const vals = Object.values(payload?.note_usage_data ?? {});
+        // 1~12까지 모두 있고 전부 0인지 확인
+        return vals.length === 12 && vals.every(v => Number(v) === 0);
+      };
     
     return(
         <Container>
@@ -45,45 +106,106 @@ const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownLi
             </Header>
 
             <Body>
-                <Dropdown
-                    options={dropdownList}
-                    value={dropdownValue}
-                    onChange={setDropdownValue}
-                    isDropdownActive={isDropdownActive}
-                    setIsDropdownActive={setIsDropdownActive}
-                    setSelectedGroupId={setSelectedGroupId}
+               <div style={{display:'flex', flexDirection: 'row', width: '100%', justifyContent: 'flex-start', gap: '14px'}}>
+               <Dropdown
+                    options={groupList}
+                    value={selectedGroup}
+                    onChange={setSelectedGroup}
+                    isDropdownActive={isGroupDropdownActive}
+                    setIsDropdownActive={setIsGroupDropdownActive}
+                    setSelectedId={setSelectedGroupId}
+                    labelKey="name"
+                    valueKey="id"
                 />
 
-                <Row>
-                    <LeftWrapper>
-                        <LabelWithHelp label="대시보드 이름" content={selectedTab === '데이터 연결망' ? '작성된 문서에 대한 Co-occurrence 분석결과 입니다. 단어간 연관도에 따라 연관관계가 표시되어있습니다.' : '검색 키워드를 임베딩하여 벡터공간에 나타낸 결과입니다. 연관도에 따라 서로 밀접하게 위치하고 있습니다.'} width={400} />
-                        <div style={{display:'flex', flexDirection: 'row', width: '100%', justifyContent: 'flex-start', gap: '10px'}}>
-                            <Tab isActive={selectedTab==='데이터 연결망'} onClick={() => setSelectedTab('데이터 연결망')}>
-                                데이터 연결망
-                            </Tab>
-                            <Tab isActive={selectedTab==='코퍼스 분석'} onClick={() => setSelectedTab('코퍼스 분석')}>
-                                코퍼스 분석
-                            </Tab>
-                        </div>
+                <Dropdown
+                    options={studentList}
+                    value={selectedStudent}
+                    onChange={setSelectedStudent}
+                    isDropdownActive={isStudentDropdownActive}
+                    setIsDropdownActive={setIsStudentDropdownActive}
+                    setSelectedId={setSelectedStudentId}
+                    labelKey="student_name"
+                    valueKey="student_id"
+                />
+               </div>
 
-                        {selectedTab === '데이터 연결망' ? <ForceGraph/> : <CorpusScatter3DFromDict/>}
-                    </LeftWrapper>
+                <Row>
+                <LeftWrapper>
+                <LabelWithHelp
+                    label="노트 사용량"
+                    content={'학생이 노트에 업로드한 글자수를 기반으로 월별 학습 활동량을 시각화합니다.'}
+                    width={400}
+                />
+
+                {noteUsage && !isAllZero(noteUsage) ? (
+                    <MonthlyNoteUsageChart payload={noteUsage} />
+                ) : (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <p
+                        style={{
+                        fontSize: '18px',
+                        fontWeight: 700,
+                        position: 'absolute',
+                        }}
+                    >
+                        데이터가 존재하지 않습니다.
+                    </p>
+                    <img src={note} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                )}
+                </LeftWrapper>
                     <RightWrapper>
-                        {chartData.login_count !== 0 && chartData.article_count !== 0 && chartData.search_count !== 0  ? <SolutionChart chartData={chartData}/> : <img src={test} alt="test" style={{width: '100%', height: '100%'}}/>}
+                        {chartData && chartData.monthly_access_counts.average_student_access_count !== 0 &&
+                        chartData.monthly_keyword_search_counts.average_student_keyword_search_count !== 0 &&
+                        chartData.monthly_note_usage_counts.average_student_note_usage_count !== 0
+                        ? (
+                            // test데이터 chartData로 수정시 서버 데이터로 변경됨
+                            <SolutionChart chartData={test}/>
+                        ) : (
+                           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                           <p
+                           style={{
+                            fontSize:'18px', 
+                            fontWeight: '700', 
+                            position: 'absolute',
+                            }}
+                           >
+                                데이터가 존재하지 않습니다. 
+                           </p>
+                            <img src={solution} alt="test" style={{width: '100%', height: '100%', objectFit: 'contain'}}/>
+                            </div>
+                        )}
                     </RightWrapper>
                 </Row>
 
                 <Row>
                     <LeftWrapper style={{height: '400px'}}>
-                        <LabelWithHelp label="그룹별 키워드" content="그룹별 가장 많이 검색된 키워드를 보여줍니다." width={350}/>
-                        <PieChart selectedGroupId={selectedGroupId}/>
+                    <LabelWithHelp label="검색 데이터 분석" content="학생이 한달동안 가장 많이 사용하는 단어를 추출해 시각적으로 보여줍니다." width={470}/>
+                       {pieChartData ? <img src={pieChartData} style={{width: '100%', height: '100%', objectFit: 'contain'}}/> :
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                            <p
+                           style={{
+                            fontSize:'18px', 
+                            fontWeight: '700', 
+                            position: 'absolute',
+                            }}
+                           >
+                                데이터가 존재하지 않습니다. 
+                           </p>
+                            <img src={wordcloud} alt="test" style={{width: '100%', height: '100%', objectFit: 'contain'}}/>
+                        </div>}
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  
                         <div style={{display:'flex', flexDirection: 'row', width: '100%'}}>
                             <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
-                            <Badge active={3}/>
+                            <Badge active={weekTotal}/>
                         </div>
-                        <Calendar selectedGroupId={selectedGroupId}/>
+                        <Calendar 
+                        selectedGroupId={selectedGroupId}
+                        selectedStudent={selectedStudentId}
+                        onWeekTotalChange={handleWeekTotalChange}
+                        />
                     </RightWrapper>
                 </Row>
             </Body>
@@ -168,16 +290,3 @@ const RightWrapper = styled.div`
     }
 `
 
-const Tab = styled.div<{isActive: boolean}>`
-    display: flex;
-    width: 130px;
-    border-radius: 5px;
-    background-color: ${(props) => props.isActive ? '#35B0E6' : 'black'};
-    color: white;
-    font-size: 12px;
-    padding: 5px;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 14px;
-`

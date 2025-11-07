@@ -1,51 +1,64 @@
 import styled from "styled-components";
 import React from "react";
-import {color} from "../../style/color";
-import { AiOutlineCaretUp} from "react-icons/ai";
+import { AiOutlineCaretUp } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
+import { color } from "../../style/color";
 
-interface Props{
-    options: {name: string, _id: string}[];
-    value: string;
-    onChange: any; 
-    isDropdownActive: boolean;
-    setIsDropdownActive: (value: boolean) => void;
-    setSelectedGroupId: (item: string) => void;
+interface Props<T> {
+  options: T[];
+  value: string;
+  onChange: (val: string) => void;
+  isDropdownActive: boolean;
+  setIsDropdownActive: (value: boolean) => void;
+  setSelectedId: (item: string) => void;
+  labelKey: keyof T;
+  valueKey: keyof T; 
 }
 
-const Dropdown: React.FC<Props> = ({setSelectedGroupId,options, value, onChange, isDropdownActive, setIsDropdownActive}) => {
+const Dropdown = <T extends Record<string, any>>({
+  options,
+  value,
+  onChange,
+  isDropdownActive,
+  setIsDropdownActive,
+  setSelectedId,
+  labelKey,
+  valueKey,
+}: Props<T>) => {
+  
+  const toggle: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    setIsDropdownActive(!isDropdownActive);
+  };
 
-    const toggle: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.stopPropagation();
-        setIsDropdownActive(!isDropdownActive);
-      };
-    
-      const select = (opt: {name: string, _id: string}) => (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onChange(opt.name)
-        setSelectedGroupId(opt._id)
-        setIsDropdownActive(false);
-      };
+  const select = (opt: T) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange(opt[labelKey] as string);
+    setSelectedId(String(opt[valueKey]));
+    setIsDropdownActive(false);
+  };
 
-    return(
-        <Wrapper>
-            <Trigger onClick={toggle}>{value} <Icon isDropdownActive={isDropdownActive} /></Trigger>
-            {isDropdownActive && (
-                <Menu role="listbox">
-                     <SearchWrapper>
-                        <SearchInput type="text" placeholder="검색" />
-                        <SearchIcon />
-                    </SearchWrapper>
-                {options.map((opt) => (
-                    <Item key={opt._id} onClick={select(opt)} role="option">
-                    {opt.name}
-                    </Item>
-                ))}
-                </Menu>
-            )}
-        </Wrapper>
-    )
-}
+  return (
+    <Wrapper>
+      <Trigger onClick={toggle}>
+        {value} <Icon isDropdownActive={isDropdownActive} />
+      </Trigger>
+      {isDropdownActive && (
+        <Menu role="listbox">
+          <SearchWrapper>
+            <SearchInput type="text" placeholder="검색" />
+            <SearchIcon />
+          </SearchWrapper>
+          {options.map((opt) => (
+            <Item key={String(opt[valueKey])} onClick={select(opt)} role="option">
+              {opt[labelKey]}
+            </Item>
+          ))}
+        </Menu>
+      )}
+    </Wrapper>
+  );
+};
 
 export default Dropdown;
 
@@ -68,7 +81,6 @@ const Menu = styled.div`
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   z-index: 100;           
-  margin-left: 20px;
 `;
 
 const SearchWrapper = styled.div`
