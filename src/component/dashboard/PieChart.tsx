@@ -5,6 +5,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Pie } from "react-chartjs-2";
 import { getTopSearchKeywords, getAnalytics } from "../../service/dashboard";
 import pieChartNoData from "../../assets/pieChart.png";
+import noData from '../../assets/nodata.png'
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -112,11 +113,11 @@ const PieChart: React.FC<Props> = ({selectedGroupId}) => {
       </>
        : 
       <img 
-      src={pieChartNoData} 
+      src={noData} 
       alt="test" 
       style={{
-        width: '100%',
-         height: '100%',
+        width: '60%',
+         height: '60%',
          objectFit: 'contain'
         }}
       />}
@@ -132,6 +133,7 @@ const Wrapper = styled.div`
     margin: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
 `;
 
 const TopTenList = styled.div`

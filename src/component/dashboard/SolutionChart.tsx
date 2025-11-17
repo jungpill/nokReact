@@ -12,6 +12,7 @@ import {
 } from 'chart.js'
 import React from 'react'
 import styled from 'styled-components'
+import noData from '../../assets/nodata.png'
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Legend, Tooltip)
 ChartJS.defaults.elements.line.tension = 0
@@ -275,7 +276,16 @@ const SolutionChart: React.FC<Props> = ({ chartData }) => {
 
   return (
     <Container>
-      <Radar data={data} options={options} />
+      {
+        chartData.login_count !== 0 && chartData.article_count !== 0 && chartData.search_count !== 0  ?
+        <Radar data={data} options={options} /> :
+        <>
+        <img src={noData} style={{
+        width: '60%',height: '60%',objectFit: 'contain'
+        }}/>
+        </>
+      }
+      
     </Container>
   )
 }
@@ -284,5 +294,8 @@ export default SolutionChart
 
 const Container = styled.div`
   width: 100%;
-  height: 90%;
+  height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `

@@ -3,6 +3,8 @@ import React, {useEffect, useState, useContext} from 'react'
 import {color} from '../../style/color'
 import {getCommunicationStatus} from '../../service/dashboard'
 import Tooltip from '../common/Tooltip'
+import LabelWithHelp from '../common/LabelWithHelp'
+import Badge from './Badge'
 
 interface Props{
     selectedGroupId: string
@@ -25,12 +27,14 @@ const Calendar: React.FC<Props> = ({selectedGroupId, onWeekTotalChange}) => {
     const adjustedFirstDay = (firstDayOfCurrentMonth === 0) ? 6 : firstDayOfCurrentMonth - 1;
 
     useEffect(() => {
+        if (!selectedGroupId) return
         const getCommunicationStatusData = async () => {
-            const temp:any[]= []
+            const temp:any[]= [{posts: 0, comments: 0}]
             const res = await getCommunicationStatus(selectedGroupId)
             res.map((item: any) => {
-                temp.push(item.week_of_month)
+                temp.push({posts: item.posts, comments: item.comments})
             })
+            console.log(temp)
             setData(temp)
         }
 
@@ -53,7 +57,6 @@ const Calendar: React.FC<Props> = ({selectedGroupId, onWeekTotalChange}) => {
     const monday = Math.max(1, currentWeekIndex * 7 - adjustedFirstDay + 1);
     const sunday = Math.min(lastDayOfCurrentMonth, monday + 6);
 
-    // ✅ 이번 주 글/댓글 합계 (달력 데이터 구조 그대로 사용)
     let weekPosts = 0;
     let weekComments = 0;
     for (let d = monday; d <= sunday; d++) {
@@ -69,83 +72,91 @@ const Calendar: React.FC<Props> = ({selectedGroupId, onWeekTotalChange}) => {
         }
     }, [weekTotal, onWeekTotalChange]);
 
-    // 라이브러리 없이 만들어보고 싶어서 했는데 만들다보니 주석을 깜박했습니다. 
-    // 추후 노크 개발하게 되시는 분 하루빨리 이직준비하세요 ㅎ 
-
     return(
         <Container>
-                <Week style={{marginLeft: '2rem'}}>
-                    {week.map(day => <DayCell key={day}>{day}</DayCell>)}
-                </Week>
+    {/* 요일 헤더: 주차 칸과 동일한 첫 칸(비워두기) */}
+    <RowGrid role="rowheader">
+      <HeaderStub aria-hidden /> 
+      {week.map((day) => (
+        <HeaderCell key={day}>{day}</HeaderCell>
+      ))}
+    </RowGrid>
 
-                {weeksInMonth.map((_, weekIndex) => (
-                    <Week key={weekIndex}>
-                        <Label style={{ marginRight: '0.8rem', minWidth: '48px' }}>{weekIndex + 1}주차</Label>
-                        {week.map((_, dayIndex) => {
-                        
-                        const dayNumber = weekIndex * 7 + dayIndex - adjustedFirstDay + 1;
+    {weeksInMonth.map((_, weekIndex) => (
+      <RowGrid key={weekIndex}>
+        <Label>{weekIndex + 1}주차</Label>
 
-                        const dataIndex = dayNumber 
+        {week.map((_, dayIndex) => {
+          const dayNumber = weekIndex * 7 + dayIndex - adjustedFirstDay + 1;
+          const isValidDate = dayNumber > 0 && dayNumber <= lastDayOfCurrentMonth;
+          const dataIndex = dayNumber;
 
-                        const isValidDate = dayNumber > 0 && dayNumber <= lastDayOfCurrentMonth;
-
-                        return (
-                            <Tooltip
-                                key={dayIndex}
-                                placement="top"
-                                disabled={!isValidDate}
-                                content={
-                                    <>
-                                       {dataIndex} 글 {data[dataIndex]?.posts ?? 0} 댓글 {data[dataIndex]?.comments ?? 0}
-                                    </>
-                                }
-                            >
-                                <Item
-                                    isAcitve={data[dataIndex]?.posts + data[dataIndex]?.comments >= 1}
-                                    style={{ opacity: isValidDate ? 1 : 0 }}
-                                />
-                            </Tooltip>
-                        );
-                        })}
-                    </Week>
-                ))}
-            
-        </Container>    
+          return (
+            <Tooltip
+              key={dayIndex}
+              placement="top"
+              disabled={!isValidDate}
+              content={
+                <>
+                  글 {data[dataIndex]?.posts ?? 0} 댓글 {data[dataIndex]?.comments ?? 0}
+                </>
+              }
+            >
+              <Item
+                isAcitve={(data[dataIndex]?.posts ?? 0) + (data[dataIndex]?.comments ?? 0) >= 3}
+                data-valid={isValidDate}
+              />
+            </Tooltip>
+          );
+        })}
+      </RowGrid>
+    ))}
+  </Container>    
     )
 }
 
 export default Calendar;
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column; 
-    width: 100%;
-    height: 100%;
-    margin-top: 1rem;
-    justify-content: center;
-`
+  display: grid;
+  gap: 12px;
+  margin-top: 1rem;
+`;
 
-const Week = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1rem;
-    align-items: center;
-`
+const GRID_COLS = '3rem repeat(7, minmax(0, 50px))';
 
-const DayCell = styled.div`
-    color: ${color.black};
-    font-size: 1rem;
-    margin-left: 2.23rem;
-`
+const RowGrid = styled.div`
+  display: grid;
+  grid-template-columns: ${GRID_COLS};
+  align-items: center;
+  gap: 10px;
+`;
 
-const Item = styled.div<{isAcitve: boolean}>`
-    background-color: ${props => props.isAcitve ? '#25E8BB' : color.gray};
-    border-radius: 200%;
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-right: 1.63rem;
-`
-const Label = styled.label`
-    text-align: center;
-    width: 3rem;
-`
+const HeaderStub = styled.div`
+  width: 3rem; /* Label과 동일 폭 */
+`;
+
+const HeaderCell = styled.div`
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+`;
+
+const Label = styled.div`
+  text-align: center;
+  width: 3rem; /* 그리드 첫 컬럼 폭과 동일 */
+  font-weight: 600;
+`;
+
+const Item = styled.div<{ isAcitve: boolean }>`
+  /* 그리드 셀 안에서 가운데 정렬용: 부모(RowGrid)가 grid라 각 칸은 자동으로 채워짐.
+     원은 자기 자신을 중앙 배치하기 위해 margin: 0 auto 사용 */
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: ${p => (p.isAcitve ? '#25E8BB' : color.gray)};
+  margin: 0 auto;            /* 가로 중앙 */
+  display: grid;
+  place-items: center;       /* 내부 콘텐츠 중앙(아이콘/숫자 넣을 때 유용) */
+`;

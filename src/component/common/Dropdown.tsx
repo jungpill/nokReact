@@ -68,7 +68,6 @@ const Menu = styled.div`
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   z-index: 100;           
-  margin-left: 20px;
 `;
 
 const SearchWrapper = styled.div`
@@ -126,6 +125,6 @@ const SearchIcon = styled(CiSearch)`
 `
 
 const Icon = styled(AiOutlineCaretUp)<{isDropdownActive: boolean}>`
-  transform: ${({isDropdownActive}) => isDropdownActive ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${({isDropdownActive}) => isDropdownActive ? 'rotate(0deg)' : 'rotate(180deg)'};
   margin-left: auto;
 `;

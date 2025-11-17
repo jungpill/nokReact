@@ -9,7 +9,8 @@ import Calendar from '../../dashboard/Calendar'
 import PieChart from '../../dashboard/PieChart'
 import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
 import Badge from '../../dashboard/Badge'
-import solutionChartNoData from "../../../assets/solutionChart.png"
+import solutionChartNoData from '../../../assets/solution.png'
+import noData from '../../../assets/nodata.png'
 
 interface Props{
     dropdownList: {name: string, _id: string}[]
@@ -74,17 +75,8 @@ const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownLi
                         {selectedTab === '데이터 연결망' ? <ForceGraph/> : <CorpusScatter3DFromDict/>}
                     </LeftWrapper>
                     <RightWrapper>
-                        {chartData.login_count !== 0 && chartData.article_count !== 0 && chartData.search_count !== 0  ? 
-                        <>
                         <LabelWithHelp label="솔루션 사용 분석" content="그룹별 활동량을 보여줍니다." width={250}/>
                         <SolutionChart chartData={chartData}/>
-                        </>: 
-                        <>
-                        <BoldText>
-                            데이터가 존재하지 않습니다.
-                        </BoldText>
-                        <img src={solutionChartNoData} alt="test" style={{objectFit: 'contain',width: '100%', height: '100%'}}/>
-                        </>}
                     </RightWrapper>
                 </Row>
 
@@ -93,12 +85,16 @@ const DashboardForm: React.FC<Props> = ({setSelectedGroupId,chartData,dropdownLi
                         <LabelWithHelp label="그룹별 키워드" content="그룹별 가장 많이 검색된 키워드를 보여줍니다." width={350}/>
                         <PieChart selectedGroupId={selectedGroupId}/>
                     </LeftWrapper>
+
                     <RightWrapper style={{height: '400px'}}>  
-                        <div style={{display:'flex', flexDirection: 'row', width: '100%'}}>
+                        <Text>
                             <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
                             <Badge active={weekTotal}/>
+                        </Text>
+
+                        <div style={{display: 'flex', width: '100%', height: '100%', justifyContent:'center'}}>
+                            <Calendar selectedGroupId={selectedGroupId} onWeekTotalChange={handleWeekTotalChange}/>
                         </div>
-                        <Calendar selectedGroupId={selectedGroupId} onWeekTotalChange={handleWeekTotalChange}/>
                     </RightWrapper>
                 </Row>
             </Body>
@@ -113,17 +109,19 @@ const Container = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding: 40px 50px;
 `
 
 const Header = styled.div`
     gap: 0.75rem;
     width: 100%;
-    padding: 2rem;
+    margin-bottom: 20px;
 `
 
 const Title = styled.h1`
     font-size: 2rem;
     font-weight: 700;
+    margin-bottom: 10px;
 `
 
 const SubTitle = styled.h2`
@@ -135,7 +133,6 @@ const Body = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem;
     border-radius: 20px;
     background-color: ${color.white};
     height: 100%;
@@ -150,8 +147,8 @@ const Row = styled.div`
 
 const LeftWrapper = styled.div`
     display: flex;
-    width: 55%;
-    height: 500px;
+    width: 65%;
+    height: 400px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
     flex-direction: column;
@@ -159,7 +156,7 @@ const LeftWrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1rem;
-
+    
     @media(max-width: 1800px){  
         width: 50%;
     }
@@ -167,14 +164,13 @@ const LeftWrapper = styled.div`
 
 const RightWrapper = styled.div`
     display: flex;
-    width: 30%;
-    height: 500px;
+    width: 35%;
+    height: 400px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;
     justify-content: center;
-    align-items: center;
     gap: 1rem;
 
 
@@ -197,8 +193,16 @@ const Tab = styled.div<{isActive: boolean}>`
     font-size: 14px;
 `
 
-const BoldText = styled.p`
-    position: absolute;
-    font-size: 18px;
-    font-weight: 700;
+const Text = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+
+    @media(min-width: 1200px) and (max-width: 2000px){  
+        width: 100%;
+    }
 `
+

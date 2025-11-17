@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react'
 import DashboardForm from '../../component/features/dashboard/DashboardForm'
 import styled from 'styled-components'
 import {instance} from '../../service/instance'
-import { getAnalytics } from '../../service/dashboard'
-import { getTopSearchKeywords } from '../../service/dashboard'
+import { getAnalytics,getTopSearchKeywords } from '../../service/dashboard'
 
 const Dashboard: React.FC = () => {
-
 
     const [groups, setGroups] = useState<{_id: string, name: string}[]>([])
     const [selectedGroup, setSelectedGroup] = useState<string>('')
