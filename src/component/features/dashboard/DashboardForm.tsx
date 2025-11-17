@@ -197,15 +197,14 @@ const DashboardForm: React.FC<Props> = ({
                         </div>}
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  
-                        <div style={{display:'flex', flexDirection: 'row', width: '100%'}}>
+                        <Text>
                             <LabelWithHelp label="소통 현황" content="게시글과 댓글 작성 데이터를 바탕으로 그룹별 소통 현황을 보여줍니다. 소통 수준은 활발(주 4회 이상), 보통(주 2회 이상), 소극(주 2회 미만)으로 구분됩니다." width={470}/>
                             <Badge active={weekTotal}/>
+                        </Text>
+
+                        <div style={{display: 'flex', width: '100%', height: '100%', justifyContent:'center'}}>
+                            <Calendar selectedGroupId={selectedGroupId} onWeekTotalChange={handleWeekTotalChange}/>
                         </div>
-                        <Calendar 
-                        selectedGroupId={selectedGroupId}
-                        selectedStudent={selectedStudentId}
-                        onWeekTotalChange={handleWeekTotalChange}
-                        />
                     </RightWrapper>
                 </Row>
             </Body>
@@ -257,7 +256,7 @@ const Row = styled.div`
 
 const LeftWrapper = styled.div`
     display: flex;
-    width: 55%;
+    width: 65%;
     height: 500px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
@@ -274,7 +273,7 @@ const LeftWrapper = styled.div`
 
 const RightWrapper = styled.div`
     display: flex;
-    width: 30%;
+    width: 35%;
     height: 500px;
     border: 2px solid #EAEAEA;
     border-radius: 15px;
@@ -290,3 +289,15 @@ const RightWrapper = styled.div`
     }
 `
 
+const Text = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+
+    @media(min-width: 1200px) and (max-width: 2000px){  
+        width: 100%;
+    }
+`
