@@ -115,7 +115,7 @@ const MonthlyNoteUsageChart: React.FC<Props> = ({ payload, height = 360 }) => {
   };
 
   return (
-    <div style={{ width: '100%', height }}>
+    <div style={{ width: '100%'}}>
       <Line data={data} options={options}  />
     </div>
   );

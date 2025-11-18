@@ -13,6 +13,7 @@ import solution from '../../../assets/solution.png'
 import MonthlyNoteUsageChart from '../../dashboard/NoteUsage'
 import note from '../../../assets/note.png'
 import wordcloud from '../../../assets/wordCloud.png'
+import defaultImage from '../../../assets/defaultImage.svg'
 
 interface Group {
     id: string;
@@ -141,21 +142,25 @@ const DashboardForm: React.FC<Props> = ({
                 {noteUsage && !isAllZero(noteUsage) ? (
                     <MonthlyNoteUsageChart payload={noteUsage} />
                 ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column',height: '100%',alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <img src={defaultImage} style={{ width: '200px', height: '150px', objectFit: 'contain' }} />
                     <p
-                        style={{
-                        fontSize: '18px',
-                        fontWeight: 700,
-                        position: 'absolute',
-                        }}
+                    style={{
+                    fontSize:'18px', 
+                    fontWeight: '700', 
+                    }}
                     >
-                        데이터가 존재하지 않습니다.
+                        데이터가 존재하지 않습니다. 
                     </p>
-                    <img src={note} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     </div>
                 )}
                 </LeftWrapper>
                     <RightWrapper>
+                        <LabelWithHelp
+                            label="솔루션 사용 분석"
+                            content={'개별 학생의 활동량을 전체 평균과 함께 비교해 제공합니다.'}
+                            width={400}
+                        />
                         {chartData && chartData.monthly_access_counts.average_student_access_count !== 0 &&
                         chartData.monthly_keyword_search_counts.average_student_keyword_search_count !== 0 &&
                         chartData.monthly_note_usage_counts.average_student_note_usage_count !== 0
@@ -163,17 +168,16 @@ const DashboardForm: React.FC<Props> = ({
                             // test데이터 chartData로 수정시 서버 데이터로 변경됨
                             <SolutionChart chartData={test}/>
                         ) : (
-                           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                           <p
+                           <div style={{display: 'flex', flexDirection: 'column',height: '100%',alignItems: 'center', justifyContent: 'center'}}>
+                            <img src={defaultImage} alt="test" style={{width: '200px', height: '150px', objectFit: 'contain'}}/>
+                            <p
                            style={{
                             fontSize:'18px', 
                             fontWeight: '700', 
-                            position: 'absolute',
                             }}
                            >
                                 데이터가 존재하지 않습니다. 
                            </p>
-                            <img src={solution} alt="test" style={{width: '100%', height: '100%', objectFit: 'contain'}}/>
                             </div>
                         )}
                     </RightWrapper>
@@ -183,17 +187,16 @@ const DashboardForm: React.FC<Props> = ({
                     <LeftWrapper style={{height: '400px'}}>
                     <LabelWithHelp label="검색 데이터 분석" content="학생이 한달동안 가장 많이 사용하는 단어를 추출해 시각적으로 보여줍니다." width={470}/>
                        {pieChartData ? <img src={pieChartData} style={{width: '100%', height: '100%', objectFit: 'contain'}}/> :
-                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <div style={{display: 'flex',flexDirection: 'column',height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                            <img src={defaultImage} alt="test" style={{width: '200px', height: '150px', objectFit: 'contain'}}/>
                             <p
                            style={{
                             fontSize:'18px', 
                             fontWeight: '700', 
-                            position: 'absolute',
                             }}
                            >
                                 데이터가 존재하지 않습니다. 
                            </p>
-                            <img src={wordcloud} alt="test" style={{width: '100%', height: '100%', objectFit: 'contain'}}/>
                         </div>}
                     </LeftWrapper>
                     <RightWrapper style={{height: '400px'}}>  
@@ -262,7 +265,6 @@ const LeftWrapper = styled.div`
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;
-    justify-content: center;
     align-items: center;
     gap: 1rem;
 
@@ -279,7 +281,6 @@ const RightWrapper = styled.div`
     border-radius: 15px;
     flex-direction: column;
     padding: 24px;
-    justify-content: center;
     align-items: center;
     gap: 1rem;
 

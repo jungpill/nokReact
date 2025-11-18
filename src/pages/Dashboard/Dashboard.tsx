@@ -4,12 +4,9 @@ import DashboardForm from "../../component/features/dashboard/DashboardForm";
 import { 
   getGroupList, 
   getStudentList, 
-  getAnalytics, 
-  getTopSearchKeywords, 
   getSolutionUsage,
   getWorldCloud,
   getNoteUsage,
-  test
 } from "../../service/dashboard"; 
 
 const Dashboard: React.FC = () => {
@@ -30,8 +27,10 @@ const Dashboard: React.FC = () => {
   // 그룹 목록 가져오기
   useEffect(() => {
     const fetchGroups = async () => {
+      console.log('실행됨')
       try {
         const res = await getGroupList();
+        console.log(res)
         setGroups(res.groups);
         setSelectedGroup(res.groups[0].name);
         setSelectedGroupId(res.groups[0].id);
