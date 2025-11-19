@@ -66,7 +66,11 @@ const Container = styled.div<{borderColor: string, boxShadow: string, background
     boxshadow: ${p => p.boxShadow};
     background-color: ${p => p.background}
     position: absolute;
-    right: 0;
+    margin-right: 30px;
+
+    @media(min-width: 1200px) and (max-width: 2000px){  
+        margin-right: 10px;
+    }
 `
 
 const IconWrap = styled.div`

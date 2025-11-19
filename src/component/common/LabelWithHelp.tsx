@@ -71,7 +71,7 @@ const TooltipBox = styled.div<{ $placement: "top" | "bottom", width: number }>`
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
   display: flex;
   padding: 20px;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
   width: ${p => p.width}px;
@@ -84,6 +84,5 @@ const TooltipBox = styled.div<{ $placement: "top" | "bottom", width: number }>`
   /* 내용 줄바꿈 */
   color: #111;
   line-height: 1.4;
-  text-align: center;
   word-break: keep-all;
 `;
