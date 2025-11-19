@@ -222,12 +222,13 @@ const Container = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding: 2rem;
 `
 
 const Header = styled.div`
     gap: 0.75rem;
     width: 100%;
-    padding: 2rem;
+    margin-bottom: 1.5rem;
 `
 
 const Title = styled.h1`
@@ -244,7 +245,6 @@ const Body = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem;
     border-radius: 20px;
     background-color: ${color.white};
     height: 100%;

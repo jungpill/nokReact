@@ -70,46 +70,53 @@ const Calendar: React.FC<Props> = ({selectedGroupId, onWeekTotalChange}) => {
         }
     }, [weekTotal, onWeekTotalChange]);
 
-    return(
-        <Container>
-    {/* 요일 헤더: 주차 칸과 동일한 첫 칸(비워두기) */}
-    <RowGrid role="rowheader">
-      <HeaderStub aria-hidden /> 
-      {week.map((day) => (
-        <HeaderCell key={day}>{day}</HeaderCell>
-      ))}
-    </RowGrid>
-
-    {weeksInMonth.map((_, weekIndex) => (
-      <RowGrid key={weekIndex}>
-        <Label>{weekIndex + 1}주차</Label>
-
-        {week.map((_, dayIndex) => {
-          const dayNumber = weekIndex * 7 + dayIndex - adjustedFirstDay + 1;
-          const isValidDate = dayNumber > 0 && dayNumber <= lastDayOfCurrentMonth;
-          const dataIndex = dayNumber;
-
-          return (
-            <Tooltip
-              key={dayIndex}
-              placement="top"
-              disabled={!isValidDate}
-              content={
-                <>
-                  글 {data[dataIndex]?.posts ?? 0} 댓글 {data[dataIndex]?.comments ?? 0}
-                </>
-              }
-            >
-              <Item
-                isAcitve={(data[dataIndex]?.posts ?? 0) + (data[dataIndex]?.comments ?? 0) >= 3}
-                data-valid={isValidDate}
-              />
-            </Tooltip>
-          );
-        })}
-      </RowGrid>
-    ))}
-  </Container>    
+    return (
+      <Container>
+        {/* 요일 헤더: 주차 칸과 동일한 첫 칸(비워두기) */}
+        <RowGrid role="rowheader">
+          <HeaderStub aria-hidden />
+          {week.map((day) => (
+            <HeaderCell key={day}>{day}</HeaderCell>
+          ))}
+        </RowGrid>
+    
+        {weeksInMonth.map((_, weekIndex) => (
+          <RowGrid key={weekIndex}>
+            <Label>{weekIndex + 1}주차</Label>
+    
+            {week.map((_, dayIndex) => {
+              const dayNumber =
+                weekIndex * 7 + dayIndex - adjustedFirstDay + 1;
+              const isValidDate =
+                dayNumber > 0 && dayNumber <= lastDayOfCurrentMonth;
+              const dataIndex = dayNumber;
+    
+              return isValidDate ? (
+                <Tooltip
+                  key={dayIndex}
+                  placement="top"
+                  content={
+                    <>
+                      글 {data[dataIndex]?.posts ?? 0}
+                      <br />
+                      댓글 {data[dataIndex]?.comments ?? 0}
+                    </>
+                  }
+                >
+                  <Item
+                    isAcitve={
+                      (data[dataIndex]?.posts ?? 0) +
+                        (data[dataIndex]?.comments ?? 0) >= 3
+                    }
+                  />
+                </Tooltip>
+              ) : (
+                <EmptyCell key={dayIndex} />
+              );
+            })}
+          </RowGrid>
+        ))}
+      </Container>
     )
 }
 
@@ -157,4 +164,8 @@ const Item = styled.div<{ isAcitve: boolean }>`
   margin: 0 auto;            /* 가로 중앙 */
   display: grid;
   place-items: center;       /* 내부 콘텐츠 중앙(아이콘/숫자 넣을 때 유용) */
+`;
+
+const EmptyCell = styled.div`
+  /* 비어 있는 날짜 칸 – 그냥 자리만 차지 */
 `;
