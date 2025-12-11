@@ -296,21 +296,6 @@ const SolutionChart: React.FC<Props> = ({ chartData }) => {
         font: '700 16px system-ui,-apple-system,Segoe UI,Roboto,sans-serif',
         color: '#0b0b0b',
       },
-
-      // ▶ 배지 하나에 두 값(해당/평균)
-      valueBadges: {
-        valuesA: student,
-        valuesB: average,
-        units: ['회', '개', '회'],
-        offsets: [24, 40, 40],
-        circleRadius: 5,
-        borderColor: '#0062FF',
-        dotAColor: '#66EAEF',
-        dotBColor: '#0062FF',
-        fillColor: '#fff',
-        textColor: '#000',
-        fontSize: 12,
-      },
     },
     scales: {
       r: {

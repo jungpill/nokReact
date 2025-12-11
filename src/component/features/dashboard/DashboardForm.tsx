@@ -4,15 +4,9 @@ import Dropdown from '../../common/Dropdown'
 import { color } from '../../../style/color'
 import LabelWithHelp from '../../common/LabelWithHelp'
 import SolutionChart from '../../dashboard/SolutionChart'
-import ForceGraph from '../../dashboard/NetworkGraph'
 import Calendar from '../../dashboard/Calendar'
-import PieChart from '../../dashboard/PieChart'
-import CorpusScatter3DFromDict from '../../dashboard/CorpusScatter3D'
 import Badge from '../../dashboard/Badge'
-import solution from '../../../assets/solution.png'
 import MonthlyNoteUsageChart from '../../dashboard/NoteUsage'
-import note from '../../../assets/note.png'
-import wordcloud from '../../../assets/wordCloud.png'
 import defaultImage from '../../../assets/defaultImage.svg'
 
 interface Group {
@@ -143,7 +137,7 @@ const DashboardForm: React.FC<Props> = ({
                     <MonthlyNoteUsageChart payload={noteUsage} />
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column',height: '100%',alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                    <img src={defaultImage} style={{ width: '200px', height: '150px', objectFit: 'contain' }} />
+                    <img src={defaultImage} style={{ width: '200px', height: '250px', objectFit: 'contain' }} />
                     <p
                     style={{
                     fontSize:'18px', 
@@ -228,12 +222,13 @@ const Container = styled.div`
 const Header = styled.div`
     gap: 0.75rem;
     width: 100%;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
 `
 
 const Title = styled.h1`
     font-size: 2rem;
     font-weight: 700;
+    margin: 0;
 `
 
 const SubTitle = styled.h2`

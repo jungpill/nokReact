@@ -138,6 +138,6 @@ const SearchIcon = styled(CiSearch)`
 `
 
 const Icon = styled(AiOutlineCaretUp)<{isDropdownActive: boolean}>`
-  transform: ${({isDropdownActive}) => isDropdownActive ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${({isDropdownActive}) => isDropdownActive ? 'rotate(0deg)' : 'rotate(180deg)'};
   margin-left: auto;
 `;

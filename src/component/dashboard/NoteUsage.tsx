@@ -32,12 +32,10 @@ const MonthlyNoteUsageChart: React.FC<Props> = ({ payload, height = 360 }) => {
     );
   }, [payload]);
 
-  
-
   // y축 범위 - 최대값 기준 10%씩 줄여서 11개 표시 (100% ~ 0%)
   const maxVal = Math.max(...values, 0);
   const yMax = Math.max(100, Math.ceil(maxVal * 1.1)); // 최소 100, 데이터 최대값 + 10%
-  const step = yMax / 10; // 10%씩 줄여서 11개 표시 (0, 10%, 20%, ..., 100%)
+  const step = yMax / 8; // 10%씩 줄여서 11개 표시 (0, 10%, 20%, ..., 100%)
 
   // Chart.js 데이터(항상 객체!)
   const data = useMemo(() => {
@@ -115,7 +113,7 @@ const MonthlyNoteUsageChart: React.FC<Props> = ({ payload, height = 360 }) => {
   };
 
   return (
-    <div style={{ width: '100%'}}>
+    <div style={{ width: '100%', height: '250px'}}>
       <Line data={data} options={options}  />
     </div>
   );
